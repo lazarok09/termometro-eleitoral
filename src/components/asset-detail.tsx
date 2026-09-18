@@ -89,6 +89,7 @@ export function AssetDetail({
   onOpenChange: (open: boolean) => void;
 }) {
   const t = useTranslations("AssetDetail");
+  const tUniverse = useTranslations("Universe");
   const tElections = useTranslations("Elections");
   const locale = useLocale();
 
@@ -115,7 +116,9 @@ export function AssetDetail({
         <SheetHeader className="pb-2">
           <div className="flex flex-wrap items-center gap-2">
             <SheetTitle className="text-2xl">{asset.ticker}</SheetTitle>
-            <Badge variant="outline">{asset.sector}</Badge>
+            <Badge variant="outline">
+              {tUniverse(`sectors.${asset.sector}`)}
+            </Badge>
             <Badge variant="outline" className="capitalize">
               {t(`stateControl.${asset.stateControl}`)}
             </Badge>
@@ -127,7 +130,7 @@ export function AssetDetail({
             {asset.name}
           </SheetDescription>
           <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-            {asset.thesis}
+            {tUniverse(`thesis.${asset.ticker}`)}
           </p>
         </SheetHeader>
 

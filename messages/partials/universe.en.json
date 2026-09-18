@@ -1,0 +1,53 @@
+{
+  "Universe": {
+    "sectors": {
+      "Petróleo e Gás": "Oil & Gas",
+      "Mineração e Siderurgia": "Mining & Steel",
+      "Bancos": "Banks",
+      "Mercado de Capitais": "Capital Markets",
+      "Energia Elétrica": "Electric Power",
+      "Saneamento": "Sanitation",
+      "Bens Industriais": "Industrials",
+      "Papel e Celulose": "Pulp & Paper",
+      "Consumo e Varejo": "Consumer & Retail",
+      "Telecom": "Telecom",
+      "Aluguel e Mobilidade": "Rental & Mobility"
+    },
+    "thesis": {
+      "PETR4": "The federal government controls the vote. Fuel prices, investment pace, and dividend policy shift with whoever is in power — and that shows up in the multiple before it shows up in earnings.",
+      "BBAS3": "Trades at a structural discount to private banks on political-balance-sheet risk (directed credit, farm subsidies). A government seen as capital-discipline friendly compresses that discount.",
+      "CMIG4": "Controlled by Minas Gerais state. Every election cycle reopens privatization, dividends, and using the company as a fiscal tool for the state.",
+      "AXIA3": "The former Eletrobras, renamed. Privatized, but with an open fight over the federal government’s voting power. The electric name where the election thesis is still more legal than operational.",
+      "CPLE3": "Privatized Paraná utility. Generation, transmission, and distribution in one group: the multiple reacts to tariffs, hydrology, and the discount the market still charges for its state origins.",
+      "EQTL3": "Distributor that grows by buying hard concessions and cutting losses and delinquency. An execution thesis, not a Brasília thesis.",
+      "ENGI11": "Same model as Equatorial: distribution in high-loss regions, leveraged to operating improvement and the rate cycle.",
+      "CPFE3": "Controlled by State Grid. Distribution and generation with more predictable cash flow than state-owned peers — the price follows rates and tariffs, not election polls.",
+      "EGIE3": "Contracted generation controlled by France’s Engie. An income profile: what moves it is the real rate, because the dividend competes with Tesouro IPCA+.",
+      "ENEV3": "Gas-fired thermal generation. Not Copel’s power bill: results depend on dispatch, gas, and contracts — more commodity than tariff.",
+      "ALUP11": "Transmission in Brazil and Peru. Contracted revenue, inflation in the contract: the direct competitor is Tesouro IPCA+, not the Ibovespa.",
+      "ISAE4": "Transmission (ex-Transmissão Paulista). Same logic as Taesa: high rates compress the multiple even with a stable contract.",
+      "AURE3": "Renewable generation spun out of Votorantim. Still trades like a company being built: a low price can be an execution discount, not a margin of safety.",
+      "SBSP3": "Privatized under a state government. Tariffs and the sanitation framework depend on regulation, so political risk is real — but state and regulatory, not federal.",
+      "B3SA3": "Earns on traded volume. The purest way to bet on falling rates: a lower Selic pushes investors from fixed income into equities, and B3 takes a toll on every trade.",
+      "ITUB4": "Exposed to the credit cycle and Selic, without the state bank’s political discount. Reacts to elections through macro (rates, defaults), not through ownership control.",
+      "BBDC4": "Same logic as Itaú, with a book historically more sensitive to defaults — which amplifies a rate-cycle move.",
+      "SANB11": "Controlled by Spain’s Santander. The discount vs Itaú usually comes from profitability, not political risk — so cheap here is an execution thesis, not an election one.",
+      "BRSR6": "Rio Grande do Sul state bank. Thinner liquidity, a state-control discount, and a regionally concentrated book — the low multiple is often structural, not an obvious opportunity.",
+      "ABCB4": "Mid-size wholesale bank. Neither a private giant’s umbrella nor a state bank’s political discount: the price follows the credit cycle and funding.",
+      "BMGB4": "Focused on payroll loans and low-income retail. A low P/B usually tracks a high cost of capital and credit risk — looks like a banana, expensive if defaults widen.",
+      "BPAC11": "Investment bank: revenue depends on issuance, M&A, and asset management. All of that reopens when the cost of capital falls.",
+      "VALE3": "Dollar revenue from iron ore. China and FX explain far more of the stock price than any election poll.",
+      "GGBR4": "Steel has a domestic leg (construction) and a U.S. leg. High rates here hurt, but U.S. results cushion local political risk.",
+      "WEGE3": "Brazilian multinational selling motors and electrical equipment worldwide. The thesis is execution and the dollar, not Brasília.",
+      "EMBJ3": "Dollar order book and defense exposure. Government matters as a customer and trade diplomacy, not as a controlling shareholder.",
+      "SUZB3": "Pulp is a global dollar commodity. Historically a hedge: when political risk weakens the real, revenue rises in reais.",
+      "PRIO3": "Oil without the state on the board. Useful to separate what in PETR4 is Brent from what is political risk.",
+      "TAEE11": "Transmission with contracted, inflation-linked revenue. Competes directly with CDI: when Selic rises, the dividend looks less attractive and the stock falls.",
+      "VIVT3": "Predictable, defensive cash flow. Political risk is regulatory (auctions, tariffs), not ownership control.",
+      "ABEV3": "Staple consumption with low leverage. What moves it is household income and tax reform on beverages.",
+      "RADL3": "Defensive retail: medicine gets bought in any scenario. Still hurt by high rates, because growth is worth less when discounted at 14%.",
+      "LREN3": "Discretionary retail is the most sensitive gauge of rates and income. Often among the first to react when the yield curve opens or closes.",
+      "RENT3": "Capital-intensive model funded by debt. Effectively a leveraged bet on the path of Selic."
+    }
+  }
+}
