@@ -103,7 +103,8 @@
     },
     "products": {
       "selicCdi": "Tesouro Selic / CDB 100% CDI",
-      "cdb140": "CDB 140% of CDI"
+      "cdb140": "CDB 140% of CDI",
+      "prefixado": "Tesouro Prefixed"
     }
   }
 }

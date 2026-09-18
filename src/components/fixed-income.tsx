@@ -68,6 +68,9 @@ function displayProductName(
 ): string {
   if (name.includes("140%")) return tLib("products.cdb140");
   if (name === "Tesouro Selic / CDB 100% CDI") return tLib("products.selicCdi");
+  if (name.startsWith("Tesouro Prefixado")) {
+    return name.replace("Tesouro Prefixado", tLib("products.prefixado"));
+  }
   return name;
 }
 
@@ -534,7 +537,7 @@ export function FixedIncomePanel({
                 <TableRow key={`${row.family}-${row.maturity}`}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{row.name}</span>
+                      <span className="font-medium">{displayProductName(row.name, tLib)}</span>
                       <Badge
                         variant="outline"
                         className={cn(

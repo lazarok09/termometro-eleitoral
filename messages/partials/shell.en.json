@@ -1,6 +1,6 @@
 {
   "MacroHeader": {
-    "title": "Termômetro Eleitoral",
+    "title": "Brazil Election Gauge",
     "description": "How much of the price of Brazil's largest B3 companies is political risk — and how much is everything else. Metrics computed from real price history since 2013, with a study of the 2014, 2018, and 2022 elections.",
     "dataAsOf": "Data as of {date}",
     "firstRound": "2026 first round",
