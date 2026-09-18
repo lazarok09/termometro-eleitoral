@@ -43,3 +43,7 @@ next-env.d.ts
 # gerado pelo Next.js para agentes de IA
 AGENTS.md
 CLAUDE.md
+
+# local archives (never commit)
+*.tar.gz
+*.tgz
