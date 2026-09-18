@@ -1,0 +1,494 @@
+{
+  "Meta": {
+    "title": "Termômetro Eleitoral — risco político no preço das ações brasileiras",
+    "description": "Painel quantitativo das maiores empresas da B3: Sharpe, volatilidade, beta, múltiplos, sensibilidade histórica a eleições e simulador de cenários pós-2026."
+  },
+  "LocaleSwitcher": {
+    "label": "Idioma",
+    "pt": "PT",
+    "en": "EN"
+  },
+  "Footer": {
+    "howToReadTitle": "Como ler este painel.",
+    "howToReadBody": "Tudo aqui é medição do passado. Betas, Sharpe e sensibilidade eleitoral descrevem como essas ações se comportaram, não como vão se comportar. O próprio histórico mostra o limite do exercício: em 2014 o mercado passou meses precificando uma alternância que não veio, e em 2022 a eleição mal mexeu nos preços enquanto o estrago apareceu depois, na transição.",
+    "dataTitle": "Dados.",
+    "dataBody": "Preços: {prices}. Macro: {macro}. Tesouro Direto: taxas oficiais do Tesouro Transparente. Série desde 2013, atualizada em {updated}. Rode <command>npm run fetch-data</command> para buscar cotações novas.",
+    "disclaimer": "Conteúdo informativo e educacional. Não é recomendação de investimento, análise de valores mobiliários nem oferta de compra ou venda."
+  },
+  "MacroHeader": {
+    "title": "Termômetro Eleitoral",
+    "description": "Quanto do preço das maiores empresas da B3 é risco político e quanto é tudo o mais. Métricas calculadas sobre o histórico real de preços desde 2013, com estudo das eleições de 2014, 2018 e 2022.",
+    "dataAsOf": "Dados até {date}",
+    "firstRound": "1º turno de 2026",
+    "days": "dias",
+    "runoff": "{firstRound} · 2º turno em {runoff}",
+    "ipcaPlus": "IPCA + {rate}",
+    "stats": {
+      "selic": {
+        "label": "Selic meta",
+        "hint": "Definida pelo Copom"
+      },
+      "cdi": {
+        "label": "CDI anualizado",
+        "hint": "O que a renda fixa paga hoje"
+      },
+      "ipca12m": {
+        "label": "IPCA 12 meses",
+        "hint": "Inflação acumulada"
+      },
+      "realRate": {
+        "label": "Juro real (CDI)",
+        "hint": "CDI descontado o IPCA"
+      },
+      "ipca2035": {
+        "label": "IPCA+ 2035",
+        "hint": "Taxa real travada hoje"
+      },
+      "ibovespa": {
+        "label": "Ibovespa",
+        "hint": "{return} em 12 meses"
+      },
+      "usd": {
+        "label": "Dólar",
+        "hint": "USD/BRL à vista"
+      },
+      "brent": {
+        "label": "Brent",
+        "hint": "Petróleo de referência"
+      }
+    }
+  },
+  "Dashboard": {
+    "tabs": {
+      "renda": "CDI vs IPCA+",
+      "ranking": "Ranking",
+      "cenarios": "Cenários",
+      "eleicoes": "Eleições passadas",
+      "preco": "Preço típico"
+    }
+  },
+  "RankingTable": {
+    "views": {
+      "risco": {
+        "label": "Risco e retorno",
+        "description": "Como cada ação se comportou nos últimos 3 anos, sempre comparada ao CDI — que é a alternativa real de quem investe no Brasil."
+      },
+      "valuation": {
+        "label": "Preço e fundamentos",
+        "description": "O que você paga por cada ação: múltiplos, dividendos e a distância entre o preço de hoje e a mediana dos últimos 3 anos."
+      },
+      "politica": {
+        "label": "Política e juros",
+        "description": "Quanto cada ação se descola do Ibovespa em temporada eleitoral e como reage historicamente a movimentos da Selic."
+      }
+    },
+    "sectors": {
+      "todas": "Todas",
+      "bancos": "Bancos",
+      "energia": "Energia",
+      "baratas": "P/VP < 1"
+    },
+    "sectorHints": {
+      "bancos": "Ordenado por P/VP. Abaixo de 1 o mercado paga menos que o patrimônio — o desconto do Banco do Brasil e dos regionais é estrutural, não um erro de preço automático. ",
+      "energia": "Elétricas listadas: geração, transmissão e distribuição. P/VP baixo aparece na transmissão (ISA, Alupar) e na Cemig; Equatorial e Eneva pagam múltiplo de crescimento. ",
+      "baratas": "Só quem negocia abaixo do valor patrimonial. Compare com a mediana de 3 anos: múltiplo baixo depois de um rali ainda é caro contra o próprio histórico. "
+    },
+    "stateLinkedOnly": "Só empresas com Estado no controle",
+    "company": "Empresa",
+    "price": "Preço",
+    "footer": "Clique em qualquer linha para abrir a análise completa da empresa. Passe o mouse sobre o nome da coluna para ver como a métrica é calculada.",
+    "weak": "fraco",
+    "bananaTooltip": "P/VP {pb} — abaixo do patrimônio contábil. Isso é desconto, não garantia de alta.",
+    "stateControl": {
+      "estatal": "estatal",
+      "ex-estatal": "ex-estatal",
+      "regulada": "regulada",
+      "privada": "privada"
+    },
+    "columns": {
+      "cagr3y": {
+        "label": "Retorno a.a. (3a)",
+        "help": "Retorno total anualizado dos últimos 3 anos, já incluindo dividendos reinvestidos."
+      },
+      "excessOverCdi": {
+        "label": "vs CDI",
+        "help": "Quanto a ação rendeu a mais (ou a menos) que o CDI no mesmo período, ao ano. Negativo significa que a renda fixa teria sido melhor."
+      },
+      "vol": {
+        "label": "Volatilidade",
+        "help": "Desvio padrão anualizado dos retornos diários. Quanto maior, mais o preço oscila."
+      },
+      "sharpe": {
+        "label": "Sharpe",
+        "help": "Retorno acima do CDI dividido pela volatilidade. Mede quanto de retorno extra você recebeu por unidade de risco. Negativo: você correu risco e perdeu para a renda fixa."
+      },
+      "beta": {
+        "label": "Beta",
+        "help": "Sensibilidade ao Ibovespa. Beta 1,5 significa que a ação tende a subir ou cair 1,5% quando o índice move 1%."
+      },
+      "dd": {
+        "label": "Queda máxima",
+        "help": "A maior queda do topo ao fundo dentro dos últimos 3 anos. É o tamanho da dor que o histórico já entregou."
+      },
+      "vsMedian": {
+        "label": "vs mediana 3a",
+        "help": "O preço de hoje comparado à mediana dos últimos 3 anos — o 'preço típico'. O marcador mostra em que ponto da distribuição histórica a ação está."
+      },
+      "vsHigh": {
+        "label": "vs máxima 52s",
+        "help": "Distância até a máxima dos últimos 12 meses."
+      },
+      "pe": {
+        "label": "P/L",
+        "help": "Preço dividido pelo lucro dos últimos 12 meses. Quantos anos de lucro atual você paga pela empresa."
+      },
+      "pb": {
+        "label": "P/VP",
+        "help": "Preço sobre valor patrimonial. Abaixo de 1 significa que o mercado paga menos do que o patrimônio contábil da empresa."
+      },
+      "dy": {
+        "label": "Dividendos 12m",
+        "help": "Proventos pagos nos últimos 12 meses sobre o preço atual. Compare com o CDI antes de chamar de 'renda'."
+      },
+      "roe": {
+        "label": "ROE",
+        "help": "Retorno sobre o patrimônio líquido: quanto de lucro a empresa gera sobre o capital dos acionistas."
+      },
+      "electionSensitivity": {
+        "label": "Sensibilidade eleitoral",
+        "help": "Quanto a ação se descola do Ibovespa em temporada eleitoral, dividido pelo quanto ela se descola no resto do tempo. Acima de 1,00: a eleição realmente mexe com essa ação além do que mexe com o índice."
+      },
+      "selicBeta": {
+        "label": "Efeito Selic +1 p.p.",
+        "help": "Retorno em excesso ao Ibovespa, historicamente associado a cada ponto percentual de alta da Selic. Valores negativos indicam ações que sofrem com juros subindo e se beneficiam de cortes."
+      },
+      "hiking": {
+        "label": "Em ciclo de alta",
+        "help": "Retorno anualizado em excesso ao Ibovespa durante períodos em que a Selic estava subindo."
+      },
+      "easing": {
+        "label": "Em ciclo de queda",
+        "help": "Retorno anualizado em excesso ao Ibovespa durante períodos em que a Selic estava caindo."
+      },
+      "usdBeta": {
+        "label": "Beta dólar",
+        "help": "Efeito de uma alta do dólar sobre a ação, já descontado o que o Ibovespa explica. Positivo indica proteção cambial."
+      },
+      "brentBeta": {
+        "label": "Beta petróleo",
+        "help": "Efeito de uma alta do Brent sobre a ação, já descontado o que o Ibovespa explica."
+      }
+    }
+  },
+  "AssetDetail": {
+    "revenuePrefix": "receita {base}",
+    "asOf": "em {date}",
+    "median3y": "Mediana 3 anos: {value}",
+    "vsMedian": "{value} vs mediana",
+    "medianLabel": "mediana",
+    "electionLabel": "eleição {year}",
+    "sections": {
+      "riskReturn": "Risco e retorno · 3 anos",
+      "fundamentals": "Fundamentos",
+      "factors": "Exposição a fatores",
+      "sensitivity": "Sensibilidade política e a juros",
+      "electionHistory": "Histórico eleitoral · retorno em excesso ao Ibovespa"
+    },
+    "metrics": {
+      "cagr": "Retorno a.a.",
+      "vsCdi": "vs CDI",
+      "vsCdiHint": "ao ano",
+      "volatility": "Volatilidade",
+      "sharpe": "Sharpe",
+      "sortino": "Sortino",
+      "beta": "Beta",
+      "correlation": "Correlação",
+      "vsIbov": "vs Ibovespa",
+      "maxDrawdown": "Queda máxima",
+      "troughOn": "fundo em {date}",
+      "marketCap": "Valor de mercado",
+      "pe": "P/L",
+      "peHint": "12 meses",
+      "forwardPe": "P/L projetado",
+      "pb": "P/VP",
+      "roe": "ROE",
+      "profitMargin": "Margem líquida",
+      "dividends12m": "Dividendos 12m",
+      "dividendsHint": "proventos pagos / preço",
+      "debtToEquity": "Dívida/patrimônio",
+      "ibov": "Ibovespa",
+      "usd": "Dólar",
+      "brent": "Brent",
+      "ust10y": "Treasury 10a",
+      "electionRatio": "Ratio eleitoral",
+      "electionRatioHint": "descolamento em eleição / normal",
+      "selicPlus1": "Selic +1 p.p.",
+      "weakSignal": "sinal estatisticamente fraco",
+      "tStat": "t = {value}",
+      "hikingCycle": "Ciclo de alta",
+      "easingCycle": "Ciclo de queda",
+      "excessAnnualized": "excesso anualizado"
+    },
+    "factorsNote": "Dólar, Brent e Treasury entram descontados do efeito do Ibovespa, então medem o que sobra além do movimento do índice. O modelo explica {rSquared} da variação diária da ação em {observations} pregões.",
+    "noElectionHistory": "Sem histórico de pregões cobrindo eleições anteriores.",
+    "stateControl": {
+      "estatal": "estatal",
+      "ex-estatal": "ex-estatal",
+      "regulada": "regulada",
+      "privada": "privada"
+    },
+    "revenueBase": {
+      "doméstica": "doméstica",
+      "exportadora": "exportadora",
+      "mista": "mista"
+    }
+  },
+  "PriceDistribution": {
+    "title": "Onde está o preço de hoje dentro dos últimos 3 anos",
+    "intro": "A média aritmética mente quando a série tem picos e colapsos: basta um rali curto para puxar o número inteiro. Por isso a referência aqui é a mediana e os quartis. A barra mostra a faixa entre a mínima e a máxima do período, a região escura concentra a metade central dos pregões, e o marcador é o preço de agora.",
+    "sorts": {
+      "percentile": "Mais barata primeiro",
+      "vsHigh": "Distância da máxima",
+      "ticker": "Alfabética"
+    },
+    "headers": {
+      "company": "Empresa",
+      "range": "Mínima · quartis · máxima (3 anos)",
+      "vsMedian": "Preço vs mediana"
+    },
+    "medianTooltip": "Mediana: {value}",
+    "todayTooltip": "Hoje: {value}",
+    "percentileTooltip": "Percentil {value} dos últimos 3 anos",
+    "high52w": "máx 52s {value}",
+    "footer": "Estar abaixo da mediana não significa estar barato, e estar acima não significa estar caro. Uma empresa cujo lucro dobrou merece negociar acima do próprio histórico; outra em deterioração pode cair para sempre. O percentil diz onde o preço está, não se o preço faz sentido."
+  },
+  "ElectionStudy": {
+    "title": "O que cada ação fez em excesso ao Ibovespa",
+    "intro": "Todos os números descontam o movimento do índice. Assim, o que aparece na tabela é o que foi específico da empresa — o prêmio ou o desconto político que o mercado atribuiu a ela, e não a maré que levantou ou afundou todos os barcos.",
+    "winnerBadge": "Vencedor",
+    "pricedInLabel": "O que estava nos preços:",
+    "noteLabel": "O que aconteceu:",
+    "companyColumn": "Empresa",
+    "ibovespaTooltip": "Ibovespa: {return}",
+    "noSeries": "sem série",
+    "footnote": "A leitura mais útil não é a coluna do dia seguinte, e sim a comparação entre os 90 pregões anteriores e o ano posterior. Quando uma ação sobe muito antes e devolve depois, o mercado comprou a expectativa e vendeu o fato."
+  },
+  "Elections": {
+    "2014": {
+      "winner": "Dilma Rousseff (reeleita)",
+      "pricedIn": "Rali de alternância: a Bolsa subiu forte entre março e setembro conforme as pesquisas sugeriam mudança de governo.",
+      "note": "O caso-limite de eleição precificada antes da hora. A reversão veio na apuração, e as estatais devolveram o prêmio que tinham acumulado."
+    },
+    "2018": {
+      "winner": "Jair Bolsonaro",
+      "pricedIn": "Agenda liberal com Paulo Guedes na Fazenda, promessa de privatizações e reforma da Previdência.",
+      "note": "O resultado confirmou o cenário que o mercado vinha comprando desde setembro, então a alta veio antes e continuou depois."
+    },
+    "2022": {
+      "winner": "Luiz Inácio Lula da Silva",
+      "pricedIn": "Vitória de Lula amplamente esperada nas pesquisas, com dúvida sobre a âncora fiscal do novo mandato.",
+      "note": "A eleição em si mexeu pouco. O estrago veio depois, com a PEC da Transição, mostrando que o que importa é o que o governo faz, não quem ganha."
+    },
+    "windows": {
+      "pre90": {
+        "label": "90 pregões antes",
+        "description": "A corrida eleitoral em si. É aqui que o mercado recalcula probabilidades e move os preços."
+      },
+      "d1": {
+        "label": "1º pregão pós-1º turno",
+        "description": "A reação imediata ao resultado. Mede o quanto o mercado foi surpreendido."
+      },
+      "d5": {
+        "label": "5 pregões pós-1º turno",
+        "description": "A primeira semana, já sem o ruído do choque inicial."
+      },
+      "runoffD1": {
+        "label": "1º pregão pós-2º turno",
+        "description": "A reação ao vencedor definitivo."
+      },
+      "post60": {
+        "label": "60 pregões após o 2º turno",
+        "description": "A transição de governo: equipe econômica, primeiras sinalizações fiscais."
+      },
+      "post250": {
+        "label": "1 ano após o 2º turno",
+        "description": "O teste real. Aqui a euforia eleitoral ou vira alta estrutural, ou evapora."
+      }
+    }
+  },
+  "ScenarioSimulator": {
+    "chooseTitle": "Escolha um cenário",
+    "chooseIntro": "Cada cenário é um conjunto de choques em um horizonte de 6 meses. Ajuste os controles para montar o seu.",
+    "shocksTitle": "Choques",
+    "adjusted": "(ajustado)",
+    "restore": "Restaurar",
+    "resultsTitle": "Retorno estimado em 6 meses",
+    "resultsIntro": "Projeção construída a partir dos betas históricos de cada ação. É uma leitura de sensibilidade, não uma previsão: mostra como essas empresas costumaram reagir a choques parecidos.",
+    "cdiPeriod": "CDI no período",
+    "vsCdi": "{return} vs CDI",
+    "channelLegend": "Contribuição por canal:",
+    "oppositeChannel": "canal em sentido contrário",
+    "channels": {
+      "ibov": "Mercado",
+      "selic": "Juros",
+      "usdbrl": "Câmbio",
+      "brent": "Petróleo",
+      "ust10y": "Juro externo"
+    },
+    "shocks": {
+      "ibov": {
+        "label": "Ibovespa",
+        "help": "O movimento do mercado como um todo."
+      },
+      "selic": {
+        "label": "Selic",
+        "help": "Variação da taxa básica, em pontos percentuais."
+      },
+      "usdbrl": {
+        "label": "Dólar",
+        "help": "Alta significa real mais fraco."
+      },
+      "brent": {
+        "label": "Petróleo Brent",
+        "help": "Preço da commodity no mercado internacional."
+      },
+      "ust10y": {
+        "label": "Treasury 10 anos",
+        "help": "Juro longo americano: alta costuma drenar capital de emergentes."
+      }
+    }
+  },
+  "Scenarios": {
+    "neutral": {
+      "name": "Nada muda",
+      "summary": "A eleição confirma o que já estava nos preços. Juros, câmbio e petróleo seguem onde estão. Serve de linha de base para comparar todo o resto."
+    },
+    "promarket": {
+      "name": "Virada pró-mercado",
+      "summary": "Resultado lido como favorável a disciplina fiscal e privatizações. O real se valoriza, a curva de juros fecha e o Copom consegue cortar a Selic."
+    },
+    "fiscalanchor": {
+      "name": "Continuidade com âncora fiscal",
+      "summary": "O governo eleito apresenta um plano fiscal que o mercado considera crível. A alta é menor que na virada, mas o canal de juros funciona igual."
+    },
+    "fiscaldrift": {
+      "name": "Sem âncora fiscal",
+      "summary": "Gasto público acelera, a dívida piora e o mercado passa a exigir prêmio. O real se desvaloriza e o Banco Central volta a subir juros."
+    },
+    "oilshock": {
+      "name": "Choque de petróleo",
+      "summary": "Brent dispara por tensão geopolítica. Bom para produtores, ruim para a inflação — e reabre a discussão sobre política de preços na Petrobras."
+    },
+    "riskoff": {
+      "name": "Aversão global a risco",
+      "summary": "O problema vem de fora: juro longo americano sobe, o dólar se fortalece e o capital estrangeiro sai de emergentes. A eleição vira detalhe."
+    }
+  },
+  "FixedIncome": {
+    "directAnswer": {
+      "badge": "Resposta direta",
+      "title": "Não automaticamente. Travar IPCA+ hoje protege contra inflação, não contra a Selic cair.",
+      "body1": "O Tesouro IPCA+ 2029 paga IPCA + {ipcaRate} reais. Com o IPCA dos últimos 12 meses em {ipca12m}, isso vira cerca de {nominal} ao ano — menos que o CDI a {cdi}. O prefixado 2029, a {prefixRate}, só perde para o IPCA+ se a inflação média até 2029 ficar acima de {breakeven}. Abaixo disso, quem trava o prefixado hoje leva mais.",
+      "body2": "O IPCA+ deixa de ser “40% de nada” quando a Selic cai: o juro real de {midRate} continua travado. O CDI, não. Mas se a Selic cair <emphasis>porque</emphasis> a inflação foi controlada, o prefixado — não o IPCA+ — é o contrato que mais ganha com a compra feita agora."
+    },
+    "verdicts": {
+      "selic": {
+        "title": "Tesouro Selic / CDB",
+        "rateHint": "flutua com o Copom",
+        "body": "Paga enquanto a Selic estiver alta. No dia em que o juro cair, o rendimento cai junto. É o único que não toma tombo de marcação a mercado se você precisar do dinheiro amanhã."
+      },
+      "prefixado": {
+        "title": "Tesouro Prefixado",
+        "rateHint": "venc. {year} travado",
+        "body": "Ganha se a inflação cooperar e a Selic cair. É a aposta na âncora fiscal: o Brasil conquista a inflação e você ficou com 14% no contrato."
+      },
+      "ipca": {
+        "title": "Tesouro IPCA+",
+        "rateHint": "venc. {year} travado",
+        "body": "Ganha se a inflação surpreender. O juro real de hoje é alto em termos históricos — travar agora faz sentido para quem consegue carregar até o vencimento."
+      }
+    },
+    "scenarios": {
+      "title": "E se a Selic e o IPCA forem outros?",
+      "intro": "Os quatro cenários abaixo reprecificam os títulos que você compraria hoje, carregados até o vencimento, com IR regressivo. Nada aqui é marcação a mercado: assume que você não vende no meio do caminho.",
+      "hypothesis": "Hipótese daqui pra frente",
+      "horizon": "Horizonte",
+      "selicAvg": "Selic média",
+      "ipcaAvg": "IPCA médio",
+      "breakevenNote": "Inflação de equilíbrio do prefixado 2029 vs IPCA+ 2029: {breakeven}. Acima disso o IPCA+ vence o prefixado.",
+      "bestNet": "Melhor líquido após IR neste cenário",
+      "winnerLine": "{net} ao ano líquido · {real} reais após inflação",
+      "productMeta": "bruto {gross} · IR {tax} · vencimento em {years} anos",
+      "realShort": "real {rate}",
+      "cdbNote": "A linha violeta é um CDB 140% do CDI — o produto da conversa original. Aparece em bancos médios, com prazo travado e teto do FGC. Não entra na escolha do vencedor porque não é comparável ao Tesouro em liquidez nem em disponibilidade."
+    },
+    "presets": {
+      "hoje": {
+        "name": "Juros como estão",
+        "summary": "A Selic permanece em 14% e o IPCA perto dos 4,2% dos últimos 12 meses. É o cenário em que o CDI continua pagando mais do que o IPCA+ em termos nominais."
+      },
+      "corte": {
+        "name": "Pós-eleição com corte",
+        "summary": "Plano fiscal crível, inflação ancorada, Copom corta a Selic para 10%. O juro real do CDI cai; o do IPCA+ que você já comprou permanece travado."
+      },
+      "desancora": {
+        "name": "Sem âncora fiscal",
+        "summary": "Gasto sobe, inflação volta a 7% e a Selic vai a 18%. O CDI nominal dispara, mas o poder de compra é comido. Quem travou IPCA+ a 7,5% reais preserva o que o prefixado perde."
+      },
+      "meta": {
+        "name": "Inflação na meta",
+        "summary": "IPCA em 3% — a meta do Banco Central — e Selic em 9%. O juro real do CDI encolhe; o IPCA+ comprado hoje a 7,5% reais vira um contrato caro de se ter deixado passar."
+      }
+    },
+    "horizons": {
+      "3": "3 anos",
+      "5": "5 anos",
+      "9": "9 anos"
+    },
+    "history": {
+      "title": "O que o IPCA+ 2035 realmente rendeu",
+      "intro": "Comprar IPCA+ não é o mesmo que carregar até o vencimento. A tabela abaixo usa o preço de mercado do Tesouro IPCA+ 2035: é o retorno de quem vendeu no meio do caminho. Nos últimos 3 anos o juro real saiu de {fromRate} para {toRate}, e a marcação a mercado comeu o cupom.",
+      "period": "{count, plural, one {# ano} other {# anos}}",
+      "columns": {
+        "period": "Período",
+        "cdi": "CDI",
+        "ipca": "IPCA",
+        "ipcaSold": "IPCA+ 2035 vendido",
+        "ibovespa": "Ibovespa",
+        "lockedReal": "Juro real na compra"
+      },
+      "footer": "Em 3 anos o CDI fez {cdi} ao ano. Quem comprou o IPCA+ 2035 e vendeu agora fez {sold} — perdeu para a renda fixa fluida e para a Bolsa. Quem carregar até 2035 ainda recebe o juro real contratado na compra. A diferença entre as duas frases é o prazo."
+    },
+    "chart": {
+      "title": "Juro real do Tesouro IPCA+ 2035 · {rate} hoje",
+      "intro": "Cada ponto deste gráfico é a taxa real que o Tesouro estava disposto a travar naquele dia. Comprar IPCA+ em 2019, a 3,4%, foi travar barato. Comprar agora, perto de 7,5%, é travar caro para o Tesouro e barato para você — desde que consiga não vender se o juro real for a 8,5%.",
+      "tooltip": "IPCA + {rate}%"
+    },
+    "menu": {
+      "title": "Cardápio vigente do Tesouro Direto",
+      "intro": "Taxas de compra da manhã de {date}. O nominal implícito do IPCA+ usa o IPCA dos últimos 12 meses só como ilustração — a inflação futura é o que vai decidir. Selic aparece quase igual ao CDI porque o ágio desses títulos está perto de zero.",
+      "columns": {
+        "title": "Título",
+        "lockedRate": "Taxa travada",
+        "impliedNominal": "Nominal implícito",
+        "netAfterTax": "Líquido após IR",
+        "realNet": "Real líquido",
+        "vsCdi": "vs CDI líquido"
+      },
+      "meta": "{years} anos · IR {tax}",
+      "ipcaPlus": "IPCA + {rate}",
+      "selicPlus": "Selic + {rate}"
+    }
+  },
+  "FixedIncomeLib": {
+    "families": {
+      "selic": "Pós-fixado à Selic",
+      "ipca": "Pós-fixado ao IPCA",
+      "prefixado": "Prefixado"
+    },
+    "products": {
+      "selicCdi": "Tesouro Selic / CDB 100% CDI",
+      "cdb140": "CDB 140% do CDI"
+    }
+  }
+}

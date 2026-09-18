@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { AssetAnalysis } from "@/lib/analytics";
 import { ELECTIONS } from "@/lib/elections";
@@ -65,12 +66,13 @@ function ChartTooltipContent({
   active?: boolean;
   payload?: { payload: PricePoint }[];
 }) {
+  const locale = useLocale();
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
-      <div className="text-xs text-muted-foreground">{shortDate(point.date)}</div>
-      <div className="tabular text-sm font-semibold">{money(point.price)}</div>
+      <div className="text-xs text-muted-foreground">{shortDate(point.date, locale)}</div>
+      <div className="tabular text-sm font-semibold">{money(point.price, locale)}</div>
     </div>
   );
 }
@@ -86,6 +88,10 @@ export function AssetDetail({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const t = useTranslations("AssetDetail");
+  const tElections = useTranslations("Elections");
+  const locale = useLocale();
+
   if (!asset) return null;
 
   const { price, performance, fundamentals, factors, rateSensitivity, electionSensitivity } = asset;
@@ -96,6 +102,9 @@ export function AssetDetail({
   const values = series.map((p) => p.price);
   const domainMin = Math.min(...values, price.min3y) * 0.96;
   const domainMax = Math.max(...values, price.max3y) * 1.04;
+
+  const revenueBaseLabel = t(`revenueBase.${asset.revenueBase}`);
+  const weakSelic = Math.abs(rateSensitivity.tStat ?? 0) < 2;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -108,10 +117,10 @@ export function AssetDetail({
             <SheetTitle className="text-2xl">{asset.ticker}</SheetTitle>
             <Badge variant="outline">{asset.sector}</Badge>
             <Badge variant="outline" className="capitalize">
-              {asset.stateControl}
+              {t(`stateControl.${asset.stateControl}`)}
             </Badge>
             <Badge variant="outline" className="capitalize">
-              receita {asset.revenueBase}
+              {t("revenuePrefix", { base: revenueBaseLabel })}
             </Badge>
           </div>
           <SheetDescription className="text-base text-foreground">
@@ -126,15 +135,17 @@ export function AssetDetail({
           <div>
             <div className="mb-2 flex items-baseline justify-between">
               <div>
-                <span className="tabular text-2xl font-semibold">{money(price.current)}</span>
+                <span className="tabular text-2xl font-semibold">
+                  {money(price.current, locale)}
+                </span>
                 <span className="ml-2 text-xs text-muted-foreground">
-                  em {shortDate(asset.lastDate)}
+                  {t("asOf", { date: shortDate(asset.lastDate, locale) })}
                 </span>
               </div>
               <div className="text-right text-xs text-muted-foreground">
-                <div>Mediana 3 anos: {money(price.median3y)}</div>
+                <div>{t("median3y", { value: money(price.median3y, locale) })}</div>
                 <div className={toneForValue(-price.vsMedian)}>
-                  {signedPercent(price.vsMedian, 1)} vs mediana
+                  {t("vsMedian", { value: signedPercent(price.vsMedian, 1) })}
                 </div>
               </div>
             </div>
@@ -151,7 +162,7 @@ export function AssetDetail({
                   <CartesianGrid stroke="var(--border)" vertical={false} />
                   <XAxis
                     dataKey="date"
-                    tickFormatter={monthYear}
+                    tickFormatter={(v: string) => monthYear(v, locale)}
                     minTickGap={48}
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                     axisLine={false}
@@ -171,7 +182,7 @@ export function AssetDetail({
                     stroke="var(--muted-foreground)"
                     strokeDasharray="4 4"
                     label={{
-                      value: "mediana",
+                      value: t("medianLabel"),
                       position: "insideTopRight",
                       fill: "var(--muted-foreground)",
                       fontSize: 10,
@@ -184,7 +195,7 @@ export function AssetDetail({
                       stroke="var(--chart-3)"
                       strokeDasharray="3 3"
                       label={{
-                        value: `eleição ${e.year}`,
+                        value: t("electionLabel", { year: e.year }),
                         position: "insideTopLeft",
                         fill: "var(--chart-3)",
                         fontSize: 10,
@@ -205,40 +216,49 @@ export function AssetDetail({
 
           <section>
             <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Risco e retorno · 3 anos
+              {t("sections.riskReturn")}
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               <Metric
-                label="Retorno a.a."
+                label={t("metrics.cagr")}
                 value={signedPercent(performance.cagr3y)}
                 tone={toneForValue(performance.cagr3y)}
               />
               <Metric
-                label="vs CDI"
+                label={t("metrics.vsCdi")}
                 value={signedPercent(performance.excessOverCdi)}
                 tone={toneForValue(performance.excessOverCdi)}
-                hint="ao ano"
+                hint={t("metrics.vsCdiHint")}
               />
-              <Metric label="Volatilidade" value={percent(performance.volatility3y, 0)} />
               <Metric
-                label="Sharpe"
+                label={t("metrics.volatility")}
+                value={percent(performance.volatility3y, 0)}
+              />
+              <Metric
+                label={t("metrics.sharpe")}
                 value={ratio(performance.sharpe3y)}
                 tone={toneForValue(performance.sharpe3y)}
               />
-              <Metric label="Sortino" value={ratio(performance.sortino3y)} />
-              <Metric label="Beta" value={ratio(performance.beta3y)} hint="vs Ibovespa" />
+              <Metric label={t("metrics.sortino")} value={ratio(performance.sortino3y)} />
               <Metric
-                label="Correlação"
-                value={ratio(performance.correlation3y)}
-                hint="vs Ibovespa"
+                label={t("metrics.beta")}
+                value={ratio(performance.beta3y)}
+                hint={t("metrics.vsIbov")}
               />
               <Metric
-                label="Queda máxima"
+                label={t("metrics.correlation")}
+                value={ratio(performance.correlation3y)}
+                hint={t("metrics.vsIbov")}
+              />
+              <Metric
+                label={t("metrics.maxDrawdown")}
                 value={percent(performance.maxDrawdown3y, 0)}
                 tone="text-rose-400"
                 hint={
                   performance.drawdownTrough
-                    ? `fundo em ${shortDate(performance.drawdownTrough)}`
+                    ? t("metrics.troughOn", {
+                        date: shortDate(performance.drawdownTrough, locale),
+                      })
                     : undefined
                 }
               />
@@ -247,22 +267,38 @@ export function AssetDetail({
 
           <section>
             <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Fundamentos
+              {t("sections.fundamentals")}
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              <Metric label="Valor de mercado" value={marketCap(fundamentals?.marketCap)} />
-              <Metric label="P/L" value={ratio(fundamentals?.trailingPE, 1)} hint="12 meses" />
-              <Metric label="P/L projetado" value={ratio(fundamentals?.forwardPE, 1)} />
-              <Metric label="P/VP" value={ratio(fundamentals?.priceToBook)} />
-              <Metric label="ROE" value={percent(fundamentals?.returnOnEquity, 1)} />
-              <Metric label="Margem líquida" value={percent(fundamentals?.profitMargin, 1)} />
               <Metric
-                label="Dividendos 12m"
-                value={percent(asset.trailingDividendYield, 1)}
-                hint="proventos pagos / preço"
+                label={t("metrics.marketCap")}
+                value={marketCap(fundamentals?.marketCap, locale)}
               />
               <Metric
-                label="Dívida/patrimônio"
+                label={t("metrics.pe")}
+                value={ratio(fundamentals?.trailingPE, 1)}
+                hint={t("metrics.peHint")}
+              />
+              <Metric
+                label={t("metrics.forwardPe")}
+                value={ratio(fundamentals?.forwardPE, 1)}
+              />
+              <Metric label={t("metrics.pb")} value={ratio(fundamentals?.priceToBook)} />
+              <Metric
+                label={t("metrics.roe")}
+                value={percent(fundamentals?.returnOnEquity, 1)}
+              />
+              <Metric
+                label={t("metrics.profitMargin")}
+                value={percent(fundamentals?.profitMargin, 1)}
+              />
+              <Metric
+                label={t("metrics.dividends12m")}
+                value={percent(asset.trailingDividendYield, 1)}
+                hint={t("metrics.dividendsHint")}
+              />
+              <Metric
+                label={t("metrics.debtToEquity")}
                 value={
                   fundamentals?.debtToEquity != null
                     ? `${fundamentals.debtToEquity.toFixed(0)}%`
@@ -274,72 +310,72 @@ export function AssetDetail({
 
           <section>
             <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Exposição a fatores
+              {t("sections.factors")}
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              <Metric label="Ibovespa" value={ratio(factors.betas.ibov)} />
+              <Metric label={t("metrics.ibov")} value={ratio(factors.betas.ibov)} />
               <Metric
-                label="Dólar"
+                label={t("metrics.usd")}
                 value={ratio(factors.betas.usdbrl)}
                 tone={toneForValue(factors.betas.usdbrl)}
               />
               <Metric
-                label="Brent"
+                label={t("metrics.brent")}
                 value={ratio(factors.betas.brent)}
                 tone={toneForValue(factors.betas.brent)}
               />
               <Metric
-                label="Treasury 10a"
+                label={t("metrics.ust10y")}
                 value={ratio(factors.betas.ust10y)}
                 tone={toneForValue(factors.betas.ust10y)}
               />
             </div>
             <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
-              Dólar, Brent e Treasury entram descontados do efeito do Ibovespa, então
-              medem o que sobra além do movimento do índice. O modelo explica{" "}
-              {percent(factors.rSquared, 0)} da variação diária da ação em{" "}
-              {factors.observations} pregões.
+              {t("factorsNote", {
+                rSquared: percent(factors.rSquared, 0),
+                observations: factors.observations,
+              })}
             </p>
           </section>
 
           <section>
             <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Sensibilidade política e a juros
+              {t("sections.sensitivity")}
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               <Metric
-                label="Ratio eleitoral"
+                label={t("metrics.electionRatio")}
                 value={ratio(electionSensitivity?.ratio)}
-                hint="descolamento em eleição / normal"
+                hint={t("metrics.electionRatioHint")}
                 tone={
                   (electionSensitivity?.ratio ?? 0) >= 1.1 ? "text-amber-300" : undefined
                 }
               />
               <Metric
-                label="Selic +1 p.p."
+                label={t("metrics.selicPlus1")}
                 value={signedPercent(rateSensitivity.betaPerPoint, 1)}
                 tone={
-                  Math.abs(rateSensitivity.tStat ?? 0) < 2
+                  weakSelic
                     ? "text-muted-foreground"
                     : toneForValue(rateSensitivity.betaPerPoint)
                 }
                 hint={
-                  Math.abs(rateSensitivity.tStat ?? 0) < 2
-                    ? "sinal estatisticamente fraco"
-                    : `t = ${ratio(rateSensitivity.tStat, 1)}`
+                  weakSelic
+                    ? t("metrics.weakSignal")
+                    : t("metrics.tStat", { value: ratio(rateSensitivity.tStat, 1) })
                 }
               />
               <Metric
-                label="Ciclo de alta"
+                label={t("metrics.hikingCycle")}
                 value={signedPercent(rateSensitivity.excessWhenHiking, 0)}
                 tone={toneForValue(rateSensitivity.excessWhenHiking)}
-                hint="excesso anualizado"
+                hint={t("metrics.excessAnnualized")}
               />
               <Metric
-                label="Ciclo de queda"
+                label={t("metrics.easingCycle")}
                 value={signedPercent(rateSensitivity.excessWhenEasing, 0)}
                 tone={toneForValue(rateSensitivity.excessWhenEasing)}
-                hint="excesso anualizado"
+                hint={t("metrics.excessAnnualized")}
               />
             </div>
           </section>
@@ -348,14 +384,16 @@ export function AssetDetail({
 
           <section>
             <h4 className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Histórico eleitoral · retorno em excesso ao Ibovespa
+              {t("sections.electionHistory")}
             </h4>
             <div className="space-y-4">
               {asset.elections.map((election) => (
                 <div key={election.year}>
                   <div className="mb-1.5 flex items-baseline gap-2">
                     <span className="text-sm font-medium">{election.year}</span>
-                    <span className="text-xs text-muted-foreground">{election.winner}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {tElections(`${election.year}.winner`)}
+                    </span>
                   </div>
                   <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                     {election.windows.map((w) => (
@@ -364,7 +402,7 @@ export function AssetDetail({
                         className="rounded-md border border-border/50 bg-card/40 px-2.5 py-1.5"
                       >
                         <div className="text-[10px] leading-tight text-muted-foreground">
-                          {w.label}
+                          {tElections(`windows.${w.windowId}.label`)}
                         </div>
                         <div
                           className={cn(
@@ -380,9 +418,7 @@ export function AssetDetail({
                 </div>
               ))}
               {asset.elections.length === 0 && (
-                <p className="text-xs text-muted-foreground">
-                  Sem histórico de pregões cobrindo eleições anteriores.
-                </p>
+                <p className="text-xs text-muted-foreground">{t("noElectionHistory")}</p>
               )}
             </div>
           </section>

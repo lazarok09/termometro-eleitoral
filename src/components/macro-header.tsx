@@ -1,9 +1,12 @@
+"use client";
+
 import { CalendarClock } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { MacroContext } from "@/lib/analytics";
 import { NEXT_ELECTION } from "@/lib/elections";
 import { tesouro } from "@/lib/fixed-income";
-import { percent, shortDate, signedPercent } from "@/lib/format";
+import { formatInteger, percent, shortDate, signedPercent } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 
 function daysUntil(iso: string, from: string): number {
@@ -23,48 +26,52 @@ function daysUntil(iso: string, from: string): number {
 type Stat = { label: string; value: string; hint: string };
 
 export function MacroHeader({ macro }: { macro: MacroContext }) {
+  const t = useTranslations("MacroHeader");
+  const locale = useLocale();
   const days = daysUntil(NEXT_ELECTION.firstRound, macro.lastDate);
 
   const stats: Stat[] = [
     {
-      label: "Selic meta",
+      label: t("stats.selic.label"),
       value: percent(macro.selicTarget / 100, 2),
-      hint: "Definida pelo Copom",
+      hint: t("stats.selic.hint"),
     },
     {
-      label: "CDI anualizado",
+      label: t("stats.cdi.label"),
       value: percent(macro.cdiAnnualized, 2),
-      hint: "O que a renda fixa paga hoje",
+      hint: t("stats.cdi.hint"),
     },
     {
-      label: "IPCA 12 meses",
+      label: t("stats.ipca12m.label"),
       value: percent(macro.ipca12m, 2),
-      hint: "Inflação acumulada",
+      hint: t("stats.ipca12m.hint"),
     },
     {
-      label: "Juro real (CDI)",
+      label: t("stats.realRate.label"),
       value: percent(macro.realRate, 2),
-      hint: "CDI descontado o IPCA",
+      hint: t("stats.realRate.hint"),
     },
     {
-      label: "IPCA+ 2035",
-      value: `IPCA + ${percent(tesouro.ipca2035[tesouro.ipca2035.length - 1]?.buyRate, 2)}`,
-      hint: "Taxa real travada hoje",
+      label: t("stats.ipca2035.label"),
+      value: t("ipcaPlus", {
+        rate: percent(tesouro.ipca2035[tesouro.ipca2035.length - 1]?.buyRate, 2),
+      }),
+      hint: t("stats.ipca2035.hint"),
     },
     {
-      label: "Ibovespa",
-      value: macro.ibovLevel.toLocaleString("pt-BR", { maximumFractionDigits: 0 }),
-      hint: `${signedPercent(macro.ibovReturn1y)} em 12 meses`,
+      label: t("stats.ibovespa.label"),
+      value: formatInteger(macro.ibovLevel, locale),
+      hint: t("stats.ibovespa.hint", { return: signedPercent(macro.ibovReturn1y) }),
     },
     {
-      label: "Dólar",
+      label: t("stats.usd.label"),
       value: `R$ ${macro.usdbrl.toFixed(2)}`,
-      hint: "USD/BRL à vista",
+      hint: t("stats.usd.hint"),
     },
     {
-      label: "Brent",
+      label: t("stats.brent.label"),
       value: `US$ ${macro.brent.toFixed(2)}`,
-      hint: "Petróleo de referência",
+      hint: t("stats.brent.hint"),
     },
   ];
 
@@ -74,30 +81,30 @@ export function MacroHeader({ macro }: { macro: MacroContext }) {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
-              Dados até {shortDate(macro.lastDate)}
+              {t("dataAsOf", { date: shortDate(macro.lastDate, locale) })}
             </Badge>
             <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              Termômetro Eleitoral
+              {t("title")}
             </h1>
             <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Quanto do preço das maiores empresas da B3 é risco político e quanto é
-              tudo o mais. Métricas calculadas sobre o histórico real de preços desde
-              2013, com estudo das eleições de 2014, 2018 e 2022.
+              {t("description")}
             </p>
           </div>
 
           <div className="shrink-0 rounded-xl border border-primary/25 bg-card/60 px-5 py-4 backdrop-blur">
             <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               <CalendarClock className="size-3.5" />
-              1º turno de 2026
+              {t("firstRound")}
             </div>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="tabular text-3xl font-semibold text-primary">{days}</span>
-              <span className="text-sm text-muted-foreground">dias</span>
+              <span className="text-sm text-muted-foreground">{t("days")}</span>
             </div>
             <div className="mt-1 text-xs text-muted-foreground">
-              {shortDate(NEXT_ELECTION.firstRound)} · 2º turno em{" "}
-              {shortDate(NEXT_ELECTION.runoff)}
+              {t("runoff", {
+                firstRound: shortDate(NEXT_ELECTION.firstRound, locale),
+                runoff: shortDate(NEXT_ELECTION.runoff, locale),
+              })}
             </div>
           </div>
         </div>

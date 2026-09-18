@@ -1,0 +1,197 @@
+{
+  "RankingTable": {
+    "views": {
+      "risco": {
+        "label": "Risk and return",
+        "description": "How each stock behaved over the last 3 years, always compared with the CDI — the real alternative for anyone investing in Brazil."
+      },
+      "valuation": {
+        "label": "Price and fundamentals",
+        "description": "What you pay for each stock: multiples, dividends, and the gap between today's price and the median of the last 3 years."
+      },
+      "politica": {
+        "label": "Politics and rates",
+        "description": "How far each stock diverges from the Ibovespa in election season and how it has historically reacted to Selic moves."
+      }
+    },
+    "sectors": {
+      "todas": "All",
+      "bancos": "Banks",
+      "energia": "Power",
+      "baratas": "P/B < 1"
+    },
+    "sectorHints": {
+      "bancos": "Sorted by P/B. Below 1, the market pays less than book value — the discount on Banco do Brasil and the regionals is structural, not an automatic mispricing. ",
+      "energia": "Listed utilities: generation, transmission, and distribution. Low P/B shows up in transmission (ISA, Alupar) and Cemig; Equatorial and Eneva trade at a growth multiple. ",
+      "baratas": "Only names trading below book value. Compare with the 3-year median: a low multiple after a rally can still be expensive versus its own history. "
+    },
+    "stateLinkedOnly": "State-linked companies only",
+    "company": "Company",
+    "price": "Price",
+    "footer": "Click any row to open the full company analysis. Hover a column name to see how the metric is calculated.",
+    "weak": "weak",
+    "bananaTooltip": "P/B {pb} — below book value. That is a discount, not a guarantee of upside.",
+    "stateControl": {
+      "estatal": "state-owned",
+      "ex-estatal": "ex-state",
+      "regulada": "regulated",
+      "privada": "private"
+    },
+    "columns": {
+      "cagr3y": {
+        "label": "Return p.a. (3y)",
+        "help": "Annualized total return over the last 3 years, including reinvested dividends."
+      },
+      "excessOverCdi": {
+        "label": "vs CDI",
+        "help": "How much the stock returned above (or below) the CDI over the same period, annualized. Negative means fixed income would have been better."
+      },
+      "vol": {
+        "label": "Volatility",
+        "help": "Annualized standard deviation of daily returns. Higher means the price swings more."
+      },
+      "sharpe": {
+        "label": "Sharpe",
+        "help": "Return above the CDI divided by volatility. Measures how much extra return you got per unit of risk. Negative: you took risk and still lost to fixed income."
+      },
+      "beta": {
+        "label": "Beta",
+        "help": "Sensitivity to the Ibovespa. A beta of 1.5 means the stock tends to rise or fall 1.5% when the index moves 1%."
+      },
+      "dd": {
+        "label": "Max drawdown",
+        "help": "The largest peak-to-trough drop within the last 3 years. The size of the pain the history has already delivered."
+      },
+      "vsMedian": {
+        "label": "vs 3y median",
+        "help": "Today's price versus the median of the last 3 years — the 'typical price'. The marker shows where the stock sits in its historical distribution."
+      },
+      "vsHigh": {
+        "label": "vs 52w high",
+        "help": "Distance to the high of the last 12 months."
+      },
+      "pe": {
+        "label": "P/E",
+        "help": "Price divided by trailing twelve-month earnings. How many years of current profit you pay for the company."
+      },
+      "pb": {
+        "label": "P/B",
+        "help": "Price to book. Below 1 means the market pays less than the company's accounting equity."
+      },
+      "dy": {
+        "label": "Dividends 12m",
+        "help": "Distributions paid over the last 12 months over the current price. Compare with the CDI before calling it 'income'."
+      },
+      "roe": {
+        "label": "ROE",
+        "help": "Return on equity: how much profit the company earns on shareholders' capital."
+      },
+      "electionSensitivity": {
+        "label": "Election sensitivity",
+        "help": "How far the stock diverges from the Ibovespa in election season, divided by how far it diverges the rest of the time. Above 1.00: the election really moves this stock beyond what it does to the index."
+      },
+      "selicBeta": {
+        "label": "Selic +1 pp effect",
+        "help": "Excess return versus the Ibovespa historically associated with each percentage point rise in the Selic. Negative values point to stocks that suffer when rates rise and benefit from cuts."
+      },
+      "hiking": {
+        "label": "In hiking cycle",
+        "help": "Annualized excess return versus the Ibovespa during periods when the Selic was rising."
+      },
+      "easing": {
+        "label": "In easing cycle",
+        "help": "Annualized excess return versus the Ibovespa during periods when the Selic was falling."
+      },
+      "usdBeta": {
+        "label": "USD beta",
+        "help": "Effect of a stronger dollar on the stock, after stripping out what the Ibovespa explains. Positive indicates FX protection."
+      },
+      "brentBeta": {
+        "label": "Oil beta",
+        "help": "Effect of a Brent rally on the stock, after stripping out what the Ibovespa explains."
+      }
+    }
+  },
+  "AssetDetail": {
+    "revenuePrefix": "revenue {base}",
+    "asOf": "as of {date}",
+    "median3y": "3-year median: {value}",
+    "vsMedian": "{value} vs median",
+    "medianLabel": "median",
+    "electionLabel": "election {year}",
+    "sections": {
+      "riskReturn": "Risk and return · 3 years",
+      "fundamentals": "Fundamentals",
+      "factors": "Factor exposure",
+      "sensitivity": "Political and rate sensitivity",
+      "electionHistory": "Election history · excess return vs Ibovespa"
+    },
+    "metrics": {
+      "cagr": "Return p.a.",
+      "vsCdi": "vs CDI",
+      "vsCdiHint": "annualized",
+      "volatility": "Volatility",
+      "sharpe": "Sharpe",
+      "sortino": "Sortino",
+      "beta": "Beta",
+      "correlation": "Correlation",
+      "vsIbov": "vs Ibovespa",
+      "maxDrawdown": "Max drawdown",
+      "troughOn": "trough on {date}",
+      "marketCap": "Market cap",
+      "pe": "P/E",
+      "peHint": "trailing 12m",
+      "forwardPe": "Forward P/E",
+      "pb": "P/B",
+      "roe": "ROE",
+      "profitMargin": "Net margin",
+      "dividends12m": "Dividends 12m",
+      "dividendsHint": "distributions paid / price",
+      "debtToEquity": "Debt/equity",
+      "ibov": "Ibovespa",
+      "usd": "USD",
+      "brent": "Brent",
+      "ust10y": "10y Treasury",
+      "electionRatio": "Election ratio",
+      "electionRatioHint": "election divergence / normal",
+      "selicPlus1": "Selic +1 pp",
+      "weakSignal": "statistically weak signal",
+      "tStat": "t = {value}",
+      "hikingCycle": "Hiking cycle",
+      "easingCycle": "Easing cycle",
+      "excessAnnualized": "annualized excess"
+    },
+    "factorsNote": "USD, Brent, and Treasury enter after stripping out the Ibovespa effect, so they measure what remains beyond the index move. The model explains {rSquared} of the stock's daily variation across {observations} sessions.",
+    "noElectionHistory": "No trading history covering prior elections.",
+    "stateControl": {
+      "estatal": "state-owned",
+      "ex-estatal": "ex-state",
+      "regulada": "regulated",
+      "privada": "private"
+    },
+    "revenueBase": {
+      "doméstica": "domestic",
+      "exportadora": "export",
+      "mista": "mixed"
+    }
+  },
+  "PriceDistribution": {
+    "title": "Where today's price sits within the last 3 years",
+    "intro": "The arithmetic mean lies when the series has spikes and collapses: a short rally is enough to pull the whole number. That is why the reference here is the median and the quartiles. The bar shows the range from the period low to the high, the darker band holds the middle half of sessions, and the marker is the current price.",
+    "sorts": {
+      "percentile": "Cheapest first",
+      "vsHigh": "Distance from high",
+      "ticker": "Alphabetical"
+    },
+    "headers": {
+      "company": "Company",
+      "range": "Low · quartiles · high (3 years)",
+      "vsMedian": "Price vs median"
+    },
+    "medianTooltip": "Median: {value}",
+    "todayTooltip": "Today: {value}",
+    "percentileTooltip": "Percentile {value} of the last 3 years",
+    "high52w": "52w high {value}",
+    "footer": "Being below the median does not mean cheap, and being above does not mean expensive. A company whose earnings doubled deserves to trade above its own history; another in decline can fall forever. The percentile says where the price is, not whether the price makes sense."
+  }
+}

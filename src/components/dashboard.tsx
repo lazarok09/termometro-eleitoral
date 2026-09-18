@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Banknote, BarChart3, LineChart, Sliders, Vote } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { AssetAnalysis, MacroContext } from "@/lib/analytics";
 import type { CurrentMenuRow, HistoricalHorseRace } from "@/lib/fixed-income";
@@ -14,11 +15,11 @@ import { ScenarioSimulator } from "@/components/scenario-simulator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const TABS = [
-  { id: "renda", label: "CDI vs IPCA+", icon: Banknote },
-  { id: "ranking", label: "Ranking", icon: BarChart3 },
-  { id: "cenarios", label: "Cenários", icon: Sliders },
-  { id: "eleicoes", label: "Eleições passadas", icon: Vote },
-  { id: "preco", label: "Preço típico", icon: LineChart },
+  { id: "renda" as const, icon: Banknote },
+  { id: "ranking" as const, icon: BarChart3 },
+  { id: "cenarios" as const, icon: Sliders },
+  { id: "eleicoes" as const, icon: Vote },
+  { id: "preco" as const, icon: LineChart },
 ];
 
 export function Dashboard({
@@ -34,6 +35,7 @@ export function Dashboard({
   races: HistoricalHorseRace[];
   menu: CurrentMenuRow[];
 }) {
+  const t = useTranslations("Dashboard");
   const [selected, setSelected] = useState<string | null>(null);
 
   const selectedAsset = selected ? (assets.find((a) => a.ticker === selected) ?? null) : null;
@@ -45,7 +47,7 @@ export function Dashboard({
           {TABS.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} className="gap-2 px-3 py-2">
               <tab.icon className="size-4" />
-              {tab.label}
+              {t(`tabs.${tab.id}`)}
             </TabsTrigger>
           ))}
         </TabsList>

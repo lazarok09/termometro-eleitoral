@@ -1,0 +1,197 @@
+{
+  "RankingTable": {
+    "views": {
+      "risco": {
+        "label": "Risco e retorno",
+        "description": "Como cada ação se comportou nos últimos 3 anos, sempre comparada ao CDI — que é a alternativa real de quem investe no Brasil."
+      },
+      "valuation": {
+        "label": "Preço e fundamentos",
+        "description": "O que você paga por cada ação: múltiplos, dividendos e a distância entre o preço de hoje e a mediana dos últimos 3 anos."
+      },
+      "politica": {
+        "label": "Política e juros",
+        "description": "Quanto cada ação se descola do Ibovespa em temporada eleitoral e como reage historicamente a movimentos da Selic."
+      }
+    },
+    "sectors": {
+      "todas": "Todas",
+      "bancos": "Bancos",
+      "energia": "Energia",
+      "baratas": "P/VP < 1"
+    },
+    "sectorHints": {
+      "bancos": "Ordenado por P/VP. Abaixo de 1 o mercado paga menos que o patrimônio — o desconto do Banco do Brasil e dos regionais é estrutural, não um erro de preço automático. ",
+      "energia": "Elétricas listadas: geração, transmissão e distribuição. P/VP baixo aparece na transmissão (ISA, Alupar) e na Cemig; Equatorial e Eneva pagam múltiplo de crescimento. ",
+      "baratas": "Só quem negocia abaixo do valor patrimonial. Compare com a mediana de 3 anos: múltiplo baixo depois de um rali ainda é caro contra o próprio histórico. "
+    },
+    "stateLinkedOnly": "Só empresas com Estado no controle",
+    "company": "Empresa",
+    "price": "Preço",
+    "footer": "Clique em qualquer linha para abrir a análise completa da empresa. Passe o mouse sobre o nome da coluna para ver como a métrica é calculada.",
+    "weak": "fraco",
+    "bananaTooltip": "P/VP {pb} — abaixo do patrimônio contábil. Isso é desconto, não garantia de alta.",
+    "stateControl": {
+      "estatal": "estatal",
+      "ex-estatal": "ex-estatal",
+      "regulada": "regulada",
+      "privada": "privada"
+    },
+    "columns": {
+      "cagr3y": {
+        "label": "Retorno a.a. (3a)",
+        "help": "Retorno total anualizado dos últimos 3 anos, já incluindo dividendos reinvestidos."
+      },
+      "excessOverCdi": {
+        "label": "vs CDI",
+        "help": "Quanto a ação rendeu a mais (ou a menos) que o CDI no mesmo período, ao ano. Negativo significa que a renda fixa teria sido melhor."
+      },
+      "vol": {
+        "label": "Volatilidade",
+        "help": "Desvio padrão anualizado dos retornos diários. Quanto maior, mais o preço oscila."
+      },
+      "sharpe": {
+        "label": "Sharpe",
+        "help": "Retorno acima do CDI dividido pela volatilidade. Mede quanto de retorno extra você recebeu por unidade de risco. Negativo: você correu risco e perdeu para a renda fixa."
+      },
+      "beta": {
+        "label": "Beta",
+        "help": "Sensibilidade ao Ibovespa. Beta 1,5 significa que a ação tende a subir ou cair 1,5% quando o índice move 1%."
+      },
+      "dd": {
+        "label": "Queda máxima",
+        "help": "A maior queda do topo ao fundo dentro dos últimos 3 anos. É o tamanho da dor que o histórico já entregou."
+      },
+      "vsMedian": {
+        "label": "vs mediana 3a",
+        "help": "O preço de hoje comparado à mediana dos últimos 3 anos — o 'preço típico'. O marcador mostra em que ponto da distribuição histórica a ação está."
+      },
+      "vsHigh": {
+        "label": "vs máxima 52s",
+        "help": "Distância até a máxima dos últimos 12 meses."
+      },
+      "pe": {
+        "label": "P/L",
+        "help": "Preço dividido pelo lucro dos últimos 12 meses. Quantos anos de lucro atual você paga pela empresa."
+      },
+      "pb": {
+        "label": "P/VP",
+        "help": "Preço sobre valor patrimonial. Abaixo de 1 significa que o mercado paga menos do que o patrimônio contábil da empresa."
+      },
+      "dy": {
+        "label": "Dividendos 12m",
+        "help": "Proventos pagos nos últimos 12 meses sobre o preço atual. Compare com o CDI antes de chamar de 'renda'."
+      },
+      "roe": {
+        "label": "ROE",
+        "help": "Retorno sobre o patrimônio líquido: quanto de lucro a empresa gera sobre o capital dos acionistas."
+      },
+      "electionSensitivity": {
+        "label": "Sensibilidade eleitoral",
+        "help": "Quanto a ação se descola do Ibovespa em temporada eleitoral, dividido pelo quanto ela se descola no resto do tempo. Acima de 1,00: a eleição realmente mexe com essa ação além do que mexe com o índice."
+      },
+      "selicBeta": {
+        "label": "Efeito Selic +1 p.p.",
+        "help": "Retorno em excesso ao Ibovespa, historicamente associado a cada ponto percentual de alta da Selic. Valores negativos indicam ações que sofrem com juros subindo e se beneficiam de cortes."
+      },
+      "hiking": {
+        "label": "Em ciclo de alta",
+        "help": "Retorno anualizado em excesso ao Ibovespa durante períodos em que a Selic estava subindo."
+      },
+      "easing": {
+        "label": "Em ciclo de queda",
+        "help": "Retorno anualizado em excesso ao Ibovespa durante períodos em que a Selic estava caindo."
+      },
+      "usdBeta": {
+        "label": "Beta dólar",
+        "help": "Efeito de uma alta do dólar sobre a ação, já descontado o que o Ibovespa explica. Positivo indica proteção cambial."
+      },
+      "brentBeta": {
+        "label": "Beta petróleo",
+        "help": "Efeito de uma alta do Brent sobre a ação, já descontado o que o Ibovespa explica."
+      }
+    }
+  },
+  "AssetDetail": {
+    "revenuePrefix": "receita {base}",
+    "asOf": "em {date}",
+    "median3y": "Mediana 3 anos: {value}",
+    "vsMedian": "{value} vs mediana",
+    "medianLabel": "mediana",
+    "electionLabel": "eleição {year}",
+    "sections": {
+      "riskReturn": "Risco e retorno · 3 anos",
+      "fundamentals": "Fundamentos",
+      "factors": "Exposição a fatores",
+      "sensitivity": "Sensibilidade política e a juros",
+      "electionHistory": "Histórico eleitoral · retorno em excesso ao Ibovespa"
+    },
+    "metrics": {
+      "cagr": "Retorno a.a.",
+      "vsCdi": "vs CDI",
+      "vsCdiHint": "ao ano",
+      "volatility": "Volatilidade",
+      "sharpe": "Sharpe",
+      "sortino": "Sortino",
+      "beta": "Beta",
+      "correlation": "Correlação",
+      "vsIbov": "vs Ibovespa",
+      "maxDrawdown": "Queda máxima",
+      "troughOn": "fundo em {date}",
+      "marketCap": "Valor de mercado",
+      "pe": "P/L",
+      "peHint": "12 meses",
+      "forwardPe": "P/L projetado",
+      "pb": "P/VP",
+      "roe": "ROE",
+      "profitMargin": "Margem líquida",
+      "dividends12m": "Dividendos 12m",
+      "dividendsHint": "proventos pagos / preço",
+      "debtToEquity": "Dívida/patrimônio",
+      "ibov": "Ibovespa",
+      "usd": "Dólar",
+      "brent": "Brent",
+      "ust10y": "Treasury 10a",
+      "electionRatio": "Ratio eleitoral",
+      "electionRatioHint": "descolamento em eleição / normal",
+      "selicPlus1": "Selic +1 p.p.",
+      "weakSignal": "sinal estatisticamente fraco",
+      "tStat": "t = {value}",
+      "hikingCycle": "Ciclo de alta",
+      "easingCycle": "Ciclo de queda",
+      "excessAnnualized": "excesso anualizado"
+    },
+    "factorsNote": "Dólar, Brent e Treasury entram descontados do efeito do Ibovespa, então medem o que sobra além do movimento do índice. O modelo explica {rSquared} da variação diária da ação em {observations} pregões.",
+    "noElectionHistory": "Sem histórico de pregões cobrindo eleições anteriores.",
+    "stateControl": {
+      "estatal": "estatal",
+      "ex-estatal": "ex-estatal",
+      "regulada": "regulada",
+      "privada": "privada"
+    },
+    "revenueBase": {
+      "doméstica": "doméstica",
+      "exportadora": "exportadora",
+      "mista": "mista"
+    }
+  },
+  "PriceDistribution": {
+    "title": "Onde está o preço de hoje dentro dos últimos 3 anos",
+    "intro": "A média aritmética mente quando a série tem picos e colapsos: basta um rali curto para puxar o número inteiro. Por isso a referência aqui é a mediana e os quartis. A barra mostra a faixa entre a mínima e a máxima do período, a região escura concentra a metade central dos pregões, e o marcador é o preço de agora.",
+    "sorts": {
+      "percentile": "Mais barata primeiro",
+      "vsHigh": "Distância da máxima",
+      "ticker": "Alfabética"
+    },
+    "headers": {
+      "company": "Empresa",
+      "range": "Mínima · quartis · máxima (3 anos)",
+      "vsMedian": "Preço vs mediana"
+    },
+    "medianTooltip": "Mediana: {value}",
+    "todayTooltip": "Hoje: {value}",
+    "percentileTooltip": "Percentil {value} dos últimos 3 anos",
+    "high52w": "máx 52s {value}",
+    "footer": "Estar abaixo da mediana não significa estar barato, e estar acima não significa estar caro. Uma empresa cujo lucro dobrou merece negociar acima do próprio histórico; outra em deterioração pode cair para sempre. O percentil diz onde o preço está, não se o preço faz sentido."
+  }
+}

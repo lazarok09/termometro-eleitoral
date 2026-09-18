@@ -1,0 +1,124 @@
+{
+  "ElectionStudy": {
+    "title": "O que cada ação fez em excesso ao Ibovespa",
+    "intro": "Todos os números descontam o movimento do índice. Assim, o que aparece na tabela é o que foi específico da empresa — o prêmio ou o desconto político que o mercado atribuiu a ela, e não a maré que levantou ou afundou todos os barcos.",
+    "winnerBadge": "Vencedor",
+    "pricedInLabel": "O que estava nos preços:",
+    "noteLabel": "O que aconteceu:",
+    "companyColumn": "Empresa",
+    "ibovespaTooltip": "Ibovespa: {return}",
+    "noSeries": "sem série",
+    "footnote": "A leitura mais útil não é a coluna do dia seguinte, e sim a comparação entre os 90 pregões anteriores e o ano posterior. Quando uma ação sobe muito antes e devolve depois, o mercado comprou a expectativa e vendeu o fato."
+  },
+  "Elections": {
+    "windows": {
+      "pre90": {
+        "label": "90 pregões antes",
+        "description": "A corrida eleitoral em si. É aqui que o mercado recalcula probabilidades e move os preços."
+      },
+      "d1": {
+        "label": "1º pregão pós-1º turno",
+        "description": "A reação imediata ao resultado. Mede o quanto o mercado foi surpreendido."
+      },
+      "d5": {
+        "label": "5 pregões pós-1º turno",
+        "description": "A primeira semana, já sem o ruído do choque inicial."
+      },
+      "runoffD1": {
+        "label": "1º pregão pós-2º turno",
+        "description": "A reação ao vencedor definitivo."
+      },
+      "post60": {
+        "label": "60 pregões após o 2º turno",
+        "description": "A transição de governo: equipe econômica, primeiras sinalizações fiscais."
+      },
+      "post250": {
+        "label": "1 ano após o 2º turno",
+        "description": "O teste real. Aqui a euforia eleitoral ou vira alta estrutural, ou evapora."
+      }
+    },
+    "2014": {
+      "winner": "Dilma Rousseff (reeleita)",
+      "pricedIn": "Rali de alternância: a Bolsa subiu forte entre março e setembro conforme as pesquisas sugeriam mudança de governo.",
+      "note": "O caso-limite de eleição precificada antes da hora. A reversão veio na apuração, e as estatais devolveram o prêmio que tinham acumulado."
+    },
+    "2018": {
+      "winner": "Jair Bolsonaro",
+      "pricedIn": "Agenda liberal com Paulo Guedes na Fazenda, promessa de privatizações e reforma da Previdência.",
+      "note": "O resultado confirmou o cenário que o mercado vinha comprando desde setembro, então a alta veio antes e continuou depois."
+    },
+    "2022": {
+      "winner": "Luiz Inácio Lula da Silva",
+      "pricedIn": "Vitória de Lula amplamente esperada nas pesquisas, com dúvida sobre a âncora fiscal do novo mandato.",
+      "note": "A eleição em si mexeu pouco. O estrago veio depois, com a PEC da Transição, mostrando que o que importa é o que o governo faz, não quem ganha."
+    }
+  },
+  "ScenarioSimulator": {
+    "chooseTitle": "Escolha um cenário",
+    "chooseIntro": "Cada cenário é um conjunto de choques em um horizonte de 6 meses. Ajuste os controles para montar o seu.",
+    "shocksTitle": "Choques",
+    "adjusted": "(ajustado)",
+    "restore": "Restaurar",
+    "resultsTitle": "Retorno estimado em 6 meses",
+    "resultsIntro": "Projeção construída a partir dos betas históricos de cada ação. É uma leitura de sensibilidade, não uma previsão: mostra como essas empresas costumaram reagir a choques parecidos.",
+    "cdiPeriod": "CDI no período",
+    "vsCdi": "{return} vs CDI",
+    "channelLegend": "Contribuição por canal:",
+    "oppositeChannel": "canal em sentido contrário",
+    "channels": {
+      "ibov": "Mercado",
+      "selic": "Juros",
+      "usdbrl": "Câmbio",
+      "brent": "Petróleo",
+      "ust10y": "Juro externo"
+    },
+    "shocks": {
+      "ibov": {
+        "label": "Ibovespa",
+        "help": "O movimento do mercado como um todo."
+      },
+      "selic": {
+        "label": "Selic",
+        "help": "Variação da taxa básica, em pontos percentuais."
+      },
+      "usdbrl": {
+        "label": "Dólar",
+        "help": "Alta significa real mais fraco."
+      },
+      "brent": {
+        "label": "Petróleo Brent",
+        "help": "Preço da commodity no mercado internacional."
+      },
+      "ust10y": {
+        "label": "Treasury 10 anos",
+        "help": "Juro longo americano: alta costuma drenar capital de emergentes."
+      }
+    }
+  },
+  "Scenarios": {
+    "neutral": {
+      "name": "Nada muda",
+      "summary": "A eleição confirma o que já estava nos preços. Juros, câmbio e petróleo seguem onde estão. Serve de linha de base para comparar todo o resto."
+    },
+    "promarket": {
+      "name": "Virada pró-mercado",
+      "summary": "Resultado lido como favorável a disciplina fiscal e privatizações. O real se valoriza, a curva de juros fecha e o Copom consegue cortar a Selic."
+    },
+    "fiscalanchor": {
+      "name": "Continuidade com âncora fiscal",
+      "summary": "O governo eleito apresenta um plano fiscal que o mercado considera crível. A alta é menor que na virada, mas o canal de juros funciona igual."
+    },
+    "fiscaldrift": {
+      "name": "Sem âncora fiscal",
+      "summary": "Gasto público acelera, a dívida piora e o mercado passa a exigir prêmio. O real se desvaloriza e o Banco Central volta a subir juros."
+    },
+    "oilshock": {
+      "name": "Choque de petróleo",
+      "summary": "Brent dispara por tensão geopolítica. Bom para produtores, ruim para a inflação — e reabre a discussão sobre política de preços na Petrobras."
+    },
+    "riskoff": {
+      "name": "Aversão global a risco",
+      "summary": "O problema vem de fora: juro longo americano sobe, o dólar se fortalece e o capital estrangeiro sai de emergentes. A eleição vira detalhe."
+    }
+  }
+}

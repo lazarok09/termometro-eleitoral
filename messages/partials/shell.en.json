@@ -1,0 +1,54 @@
+{
+  "MacroHeader": {
+    "title": "Termômetro Eleitoral",
+    "description": "How much of the price of Brazil's largest B3 companies is political risk — and how much is everything else. Metrics computed from real price history since 2013, with a study of the 2014, 2018, and 2022 elections.",
+    "dataAsOf": "Data as of {date}",
+    "firstRound": "2026 first round",
+    "days": "days",
+    "runoff": "{firstRound} · runoff on {runoff}",
+    "ipcaPlus": "IPCA + {rate}",
+    "stats": {
+      "selic": {
+        "label": "Selic target",
+        "hint": "Set by Copom"
+      },
+      "cdi": {
+        "label": "Annualized CDI",
+        "hint": "What fixed income pays today"
+      },
+      "ipca12m": {
+        "label": "12-month IPCA",
+        "hint": "Cumulative inflation"
+      },
+      "realRate": {
+        "label": "Real rate (CDI)",
+        "hint": "CDI net of IPCA"
+      },
+      "ipca2035": {
+        "label": "IPCA+ 2035",
+        "hint": "Real yield locked in today"
+      },
+      "ibovespa": {
+        "label": "Ibovespa",
+        "hint": "{return} over 12 months"
+      },
+      "usd": {
+        "label": "Dollar",
+        "hint": "Spot USD/BRL"
+      },
+      "brent": {
+        "label": "Brent",
+        "hint": "Benchmark crude"
+      }
+    }
+  },
+  "Dashboard": {
+    "tabs": {
+      "renda": "CDI vs IPCA+",
+      "ranking": "Ranking",
+      "cenarios": "Scenarios",
+      "eleicoes": "Past elections",
+      "preco": "Typical price"
+    }
+  }
+}

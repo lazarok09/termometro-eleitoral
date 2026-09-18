@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { AssetAnalysis } from "@/lib/analytics";
 import { percent, signedPercent, toneForValue } from "@/lib/format";
@@ -12,13 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const CHANNEL_LABELS: Record<keyof Shock, string> = {
-  ibov: "Mercado",
-  selic: "Juros",
-  usdbrl: "Câmbio",
-  brent: "Petróleo",
-  ust10y: "Juro externo",
-};
+const CHANNEL_KEYS = ["ibov", "selic", "usdbrl", "brent", "ust10y"] as const;
 
 const CHANNEL_COLORS: Record<keyof Shock, string> = {
   ibov: "bg-sky-400/80",
@@ -42,6 +37,8 @@ export function ScenarioSimulator({
   cdiAnnualized: number;
   onSelect: (ticker: string) => void;
 }) {
+  const t = useTranslations("ScenarioSimulator");
+  const tScenarios = useTranslations("Scenarios");
   const [scenarioId, setScenarioId] = useState("promarket");
   const [shock, setShock] = useState<Shock>(
     () => SCENARIOS.find((s) => s.id === "promarket")!.shock,
@@ -69,15 +66,16 @@ export function ScenarioSimulator({
     setShock(next.shock);
   }
 
+  function channelLabel(channel: keyof Shock): string {
+    return t(`channels.${channel}`);
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
       <div className="space-y-4">
         <div>
-          <h3 className="text-sm font-medium">Escolha um cenário</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Cada cenário é um conjunto de choques em um horizonte de 6 meses. Ajuste
-            os controles para montar o seu.
-          </p>
+          <h3 className="text-sm font-medium">{t("chooseTitle")}</h3>
+          <p className="mt-1 text-xs text-muted-foreground">{t("chooseIntro")}</p>
         </div>
 
         <div className="grid gap-2">
@@ -93,9 +91,9 @@ export function ScenarioSimulator({
                   : "border-border/60 bg-card/40 hover:border-border hover:bg-card/70",
               )}
             >
-              <div className="text-sm font-medium">{item.name}</div>
+              <div className="text-sm font-medium">{tScenarios(`${item.id}.name`)}</div>
               <div className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                {item.summary}
+                {tScenarios(`${item.id}.summary`)}
               </div>
             </button>
           ))}
@@ -105,7 +103,8 @@ export function ScenarioSimulator({
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm">
-                Choques {isCustom && <span className="text-primary">(ajustado)</span>}
+                {t("shocksTitle")}{" "}
+                {isCustom && <span className="text-primary">{t("adjusted")}</span>}
               </CardTitle>
               {isCustom && scenario && (
                 <Button
@@ -115,7 +114,7 @@ export function ScenarioSimulator({
                   onClick={() => setShock(scenario.shock)}
                 >
                   <RotateCcw className="size-3" />
-                  Restaurar
+                  {t("restore")}
                 </Button>
               )}
             </div>
@@ -126,9 +125,13 @@ export function ScenarioSimulator({
                 <div className="flex items-baseline justify-between">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span className="cursor-help text-xs font-medium">{control.label}</span>
+                      <span className="cursor-help text-xs font-medium">
+                        {t(`shocks.${control.key}.label`)}
+                      </span>
                     </TooltipTrigger>
-                    <TooltipContent className="max-w-xs">{control.help}</TooltipContent>
+                    <TooltipContent className="max-w-xs">
+                      {t(`shocks.${control.key}.help`)}
+                    </TooltipContent>
                   </Tooltip>
                   <span className="tabular text-sm font-medium">
                     {formatShock(control.key, shock[control.key])}
@@ -151,16 +154,14 @@ export function ScenarioSimulator({
       <div className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h3 className="text-sm font-medium">Retorno estimado em 6 meses</h3>
+            <h3 className="text-sm font-medium">{t("resultsTitle")}</h3>
             <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted-foreground">
-              Projeção construída a partir dos betas históricos de cada ação. É uma
-              leitura de sensibilidade, não uma previsão: mostra como essas empresas
-              costumaram reagir a choques parecidos.
+              {t("resultsIntro")}
             </p>
           </div>
           <div className="rounded-lg border border-border/60 bg-card/40 px-3 py-2 text-right">
             <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              CDI no período
+              {t("cdiPeriod")}
             </div>
             <div className="tabular text-base font-semibold">{percent(cdiOverHorizon)}</div>
           </div>
@@ -192,7 +193,7 @@ export function ScenarioSimulator({
                     )}
                     style={{ width: `${width}%` }}
                   >
-                    {(Object.keys(CHANNEL_LABELS) as (keyof Shock)[]).map((channel) => {
+                    {CHANNEL_KEYS.map((channel) => {
                       const contribution = p.contributions[channel];
                       if (Math.abs(contribution) < 1e-6) return null;
                       const share =
@@ -201,8 +202,7 @@ export function ScenarioSimulator({
                           (acc, c) => acc + Math.abs(c),
                           0,
                         );
-                      const aligned =
-                        contribution >= 0 === p.expected >= 0;
+                      const aligned = contribution >= 0 === p.expected >= 0;
                       return (
                         <Tooltip key={channel}>
                           <TooltipTrigger asChild>
@@ -215,7 +215,7 @@ export function ScenarioSimulator({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            {CHANNEL_LABELS[channel]}: {signedPercent(contribution)}
+                            {channelLabel(channel)}: {signedPercent(contribution)}
                           </TooltipContent>
                         </Tooltip>
                       );
@@ -233,7 +233,7 @@ export function ScenarioSimulator({
                       beatsCdi ? "text-emerald-400/70" : "text-muted-foreground",
                     )}
                   >
-                    {signedPercent(p.vsCdi)} vs CDI
+                    {t("vsCdi", { return: signedPercent(p.vsCdi) })}
                   </div>
                 </div>
               </button>
@@ -242,16 +242,16 @@ export function ScenarioSimulator({
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground">
-          <span>Contribuição por canal:</span>
-          {(Object.keys(CHANNEL_LABELS) as (keyof Shock)[]).map((channel) => (
+          <span>{t("channelLegend")}</span>
+          {CHANNEL_KEYS.map((channel) => (
             <span key={channel} className="flex items-center gap-1.5">
               <span className={cn("size-2 rounded-full", CHANNEL_COLORS[channel])} />
-              {CHANNEL_LABELS[channel]}
+              {channelLabel(channel)}
             </span>
           ))}
           <span className="flex items-center gap-1.5">
             <span className="size-2 rounded-full bg-muted" />
-            canal em sentido contrário
+            {t("oppositeChannel")}
           </span>
         </div>
       </div>

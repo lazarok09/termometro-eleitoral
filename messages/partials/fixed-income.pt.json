@@ -1,0 +1,109 @@
+{
+  "FixedIncome": {
+    "directAnswer": {
+      "badge": "Resposta direta",
+      "title": "Não automaticamente. Travar IPCA+ hoje protege contra inflação, não contra a Selic cair.",
+      "body1": "O Tesouro IPCA+ 2029 paga IPCA + {ipcaRate} reais. Com o IPCA dos últimos 12 meses em {ipca12m}, isso vira cerca de {nominal} ao ano — menos que o CDI a {cdi}. O prefixado 2029, a {prefixRate}, só perde para o IPCA+ se a inflação média até 2029 ficar acima de {breakeven}. Abaixo disso, quem trava o prefixado hoje leva mais.",
+      "body2": "O IPCA+ deixa de ser “40% de nada” quando a Selic cai: o juro real de {midRate} continua travado. O CDI, não. Mas se a Selic cair <emphasis>porque</emphasis> a inflação foi controlada, o prefixado — não o IPCA+ — é o contrato que mais ganha com a compra feita agora."
+    },
+    "verdicts": {
+      "selic": {
+        "title": "Tesouro Selic / CDB",
+        "rateHint": "flutua com o Copom",
+        "body": "Paga enquanto a Selic estiver alta. No dia em que o juro cair, o rendimento cai junto. É o único que não toma tombo de marcação a mercado se você precisar do dinheiro amanhã."
+      },
+      "prefixado": {
+        "title": "Tesouro Prefixado",
+        "rateHint": "venc. {year} travado",
+        "body": "Ganha se a inflação cooperar e a Selic cair. É a aposta na âncora fiscal: o Brasil conquista a inflação e você ficou com 14% no contrato."
+      },
+      "ipca": {
+        "title": "Tesouro IPCA+",
+        "rateHint": "venc. {year} travado",
+        "body": "Ganha se a inflação surpreender. O juro real de hoje é alto em termos históricos — travar agora faz sentido para quem consegue carregar até o vencimento."
+      }
+    },
+    "scenarios": {
+      "title": "E se a Selic e o IPCA forem outros?",
+      "intro": "Os quatro cenários abaixo reprecificam os títulos que você compraria hoje, carregados até o vencimento, com IR regressivo. Nada aqui é marcação a mercado: assume que você não vende no meio do caminho.",
+      "hypothesis": "Hipótese daqui pra frente",
+      "horizon": "Horizonte",
+      "selicAvg": "Selic média",
+      "ipcaAvg": "IPCA médio",
+      "breakevenNote": "Inflação de equilíbrio do prefixado 2029 vs IPCA+ 2029: {breakeven}. Acima disso o IPCA+ vence o prefixado.",
+      "bestNet": "Melhor líquido após IR neste cenário",
+      "winnerLine": "{net} ao ano líquido · {real} reais após inflação",
+      "productMeta": "bruto {gross} · IR {tax} · vencimento em {years} anos",
+      "realShort": "real {rate}",
+      "cdbNote": "A linha violeta é um CDB 140% do CDI — o produto da conversa original. Aparece em bancos médios, com prazo travado e teto do FGC. Não entra na escolha do vencedor porque não é comparável ao Tesouro em liquidez nem em disponibilidade."
+    },
+    "presets": {
+      "hoje": {
+        "name": "Juros como estão",
+        "summary": "A Selic permanece em 14% e o IPCA perto dos 4,2% dos últimos 12 meses. É o cenário em que o CDI continua pagando mais do que o IPCA+ em termos nominais."
+      },
+      "corte": {
+        "name": "Pós-eleição com corte",
+        "summary": "Plano fiscal crível, inflação ancorada, Copom corta a Selic para 10%. O juro real do CDI cai; o do IPCA+ que você já comprou permanece travado."
+      },
+      "desancora": {
+        "name": "Sem âncora fiscal",
+        "summary": "Gasto sobe, inflação volta a 7% e a Selic vai a 18%. O CDI nominal dispara, mas o poder de compra é comido. Quem travou IPCA+ a 7,5% reais preserva o que o prefixado perde."
+      },
+      "meta": {
+        "name": "Inflação na meta",
+        "summary": "IPCA em 3% — a meta do Banco Central — e Selic em 9%. O juro real do CDI encolhe; o IPCA+ comprado hoje a 7,5% reais vira um contrato caro de se ter deixado passar."
+      }
+    },
+    "horizons": {
+      "3": "3 anos",
+      "5": "5 anos",
+      "9": "9 anos"
+    },
+    "history": {
+      "title": "O que o IPCA+ 2035 realmente rendeu",
+      "intro": "Comprar IPCA+ não é o mesmo que carregar até o vencimento. A tabela abaixo usa o preço de mercado do Tesouro IPCA+ 2035: é o retorno de quem vendeu no meio do caminho. Nos últimos 3 anos o juro real saiu de {fromRate} para {toRate}, e a marcação a mercado comeu o cupom.",
+      "period": "{count, plural, one {# ano} other {# anos}}",
+      "columns": {
+        "period": "Período",
+        "cdi": "CDI",
+        "ipca": "IPCA",
+        "ipcaSold": "IPCA+ 2035 vendido",
+        "ibovespa": "Ibovespa",
+        "lockedReal": "Juro real na compra"
+      },
+      "footer": "Em 3 anos o CDI fez {cdi} ao ano. Quem comprou o IPCA+ 2035 e vendeu agora fez {sold} — perdeu para a renda fixa fluida e para a Bolsa. Quem carregar até 2035 ainda recebe o juro real contratado na compra. A diferença entre as duas frases é o prazo."
+    },
+    "chart": {
+      "title": "Juro real do Tesouro IPCA+ 2035 · {rate} hoje",
+      "intro": "Cada ponto deste gráfico é a taxa real que o Tesouro estava disposto a travar naquele dia. Comprar IPCA+ em 2019, a 3,4%, foi travar barato. Comprar agora, perto de 7,5%, é travar caro para o Tesouro e barato para você — desde que consiga não vender se o juro real for a 8,5%.",
+      "tooltip": "IPCA + {rate}%"
+    },
+    "menu": {
+      "title": "Cardápio vigente do Tesouro Direto",
+      "intro": "Taxas de compra da manhã de {date}. O nominal implícito do IPCA+ usa o IPCA dos últimos 12 meses só como ilustração — a inflação futura é o que vai decidir. Selic aparece quase igual ao CDI porque o ágio desses títulos está perto de zero.",
+      "columns": {
+        "title": "Título",
+        "lockedRate": "Taxa travada",
+        "impliedNominal": "Nominal implícito",
+        "netAfterTax": "Líquido após IR",
+        "realNet": "Real líquido",
+        "vsCdi": "vs CDI líquido"
+      },
+      "meta": "{years} anos · IR {tax}",
+      "ipcaPlus": "IPCA + {rate}",
+      "selicPlus": "Selic + {rate}"
+    }
+  },
+  "FixedIncomeLib": {
+    "families": {
+      "selic": "Pós-fixado à Selic",
+      "ipca": "Pós-fixado ao IPCA",
+      "prefixado": "Prefixado"
+    },
+    "products": {
+      "selicCdi": "Tesouro Selic / CDB 100% CDI",
+      "cdb140": "CDB 140% do CDI"
+    }
+  }
+}

@@ -66,7 +66,6 @@ export type FactorExposure = {
 
 export type WindowResult = {
   windowId: string;
-  label: string;
   assetReturn: number;
   ibovReturn: number;
   excess: number;
@@ -74,9 +73,6 @@ export type WindowResult = {
 
 export type ElectionResult = {
   year: number;
-  winner: string;
-  pricedIn: string;
-  note: string;
   windows: WindowResult[];
 };
 
@@ -325,7 +321,6 @@ function computeElections(symbol: string): ElectionResult[] {
       const ibovReturn = benchCloses[range.toIdx] / benchCloses[range.fromIdx] - 1;
       windows.push({
         windowId: spec.id,
-        label: spec.label,
         assetReturn,
         ibovReturn,
         excess: assetReturn - ibovReturn,
@@ -335,9 +330,6 @@ function computeElections(symbol: string): ElectionResult[] {
     if (windows.length > 0) {
       results.push({
         year: election.year,
-        winner: election.winner,
-        pricedIn: election.pricedIn,
-        note: election.note,
         windows,
       });
     }

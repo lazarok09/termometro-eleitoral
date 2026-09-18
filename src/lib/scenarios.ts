@@ -14,52 +14,32 @@ export type Shock = {
 
 export type Scenario = {
   id: string;
-  name: string;
-  summary: string;
   shock: Shock;
 };
 
 export const SCENARIOS: Scenario[] = [
   {
     id: "neutral",
-    name: "Nada muda",
-    summary:
-      "A eleição confirma o que já estava nos preços. Juros, câmbio e petróleo seguem onde estão. Serve de linha de base para comparar todo o resto.",
     shock: { ibov: 0, usdbrl: 0, brent: 0, ust10y: 0, selic: 0 },
   },
   {
     id: "promarket",
-    name: "Virada pró-mercado",
-    summary:
-      "Resultado lido como favorável a disciplina fiscal e privatizações. O real se valoriza, a curva de juros fecha e o Copom consegue cortar a Selic.",
     shock: { ibov: 0.2, usdbrl: -0.08, brent: 0, ust10y: 0, selic: -3 },
   },
   {
     id: "fiscalanchor",
-    name: "Continuidade com âncora fiscal",
-    summary:
-      "O governo eleito apresenta um plano fiscal que o mercado considera crível. A alta é menor que na virada, mas o canal de juros funciona igual.",
     shock: { ibov: 0.08, usdbrl: -0.03, brent: 0, ust10y: 0, selic: -1.5 },
   },
   {
     id: "fiscaldrift",
-    name: "Sem âncora fiscal",
-    summary:
-      "Gasto público acelera, a dívida piora e o mercado passa a exigir prêmio. O real se desvaloriza e o Banco Central volta a subir juros.",
     shock: { ibov: -0.18, usdbrl: 0.14, brent: 0, ust10y: 0.05, selic: 2.5 },
   },
   {
     id: "oilshock",
-    name: "Choque de petróleo",
-    summary:
-      "Brent dispara por tensão geopolítica. Bom para produtores, ruim para a inflação — e reabre a discussão sobre política de preços na Petrobras.",
     shock: { ibov: 0.04, usdbrl: -0.02, brent: 0.3, ust10y: 0.02, selic: 0.5 },
   },
   {
     id: "riskoff",
-    name: "Aversão global a risco",
-    summary:
-      "O problema vem de fora: juro longo americano sobe, o dólar se fortalece e o capital estrangeiro sai de emergentes. A eleição vira detalhe.",
     shock: { ibov: -0.22, usdbrl: 0.16, brent: -0.18, ust10y: 0.2, selic: 1 },
   },
 ];
@@ -128,11 +108,10 @@ export function projectScenario(
     .sort((a, b) => b.expected - a.expected);
 }
 
+/** Labels/help: `ScenarioSimulator.shocks.{key}` in messages. */
 export const SHOCK_CONTROLS = [
   {
     key: "ibov" as const,
-    label: "Ibovespa",
-    help: "O movimento do mercado como um todo.",
     min: -0.4,
     max: 0.4,
     step: 0.01,
@@ -140,8 +119,6 @@ export const SHOCK_CONTROLS = [
   },
   {
     key: "selic" as const,
-    label: "Selic",
-    help: "Variação da taxa básica, em pontos percentuais.",
     min: -5,
     max: 5,
     step: 0.25,
@@ -149,8 +126,6 @@ export const SHOCK_CONTROLS = [
   },
   {
     key: "usdbrl" as const,
-    label: "Dólar",
-    help: "Alta significa real mais fraco.",
     min: -0.25,
     max: 0.35,
     step: 0.01,
@@ -158,8 +133,6 @@ export const SHOCK_CONTROLS = [
   },
   {
     key: "brent" as const,
-    label: "Petróleo Brent",
-    help: "Preço da commodity no mercado internacional.",
     min: -0.4,
     max: 0.5,
     step: 0.01,
@@ -167,8 +140,6 @@ export const SHOCK_CONTROLS = [
   },
   {
     key: "ust10y" as const,
-    label: "Treasury 10 anos",
-    help: "Juro longo americano: alta costuma drenar capital de emergentes.",
     min: -0.3,
     max: 0.4,
     step: 0.01,

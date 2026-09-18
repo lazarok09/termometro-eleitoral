@@ -1,0 +1,494 @@
+{
+  "Meta": {
+    "title": "Electoral Thermometer — political risk in Brazilian stock prices",
+    "description": "Quantitative dashboard of the largest B3 companies: Sharpe, volatility, beta, multiples, historical election sensitivity, and a post-2026 scenario simulator."
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "pt": "PT",
+    "en": "EN"
+  },
+  "Footer": {
+    "howToReadTitle": "How to read this dashboard.",
+    "howToReadBody": "Everything here measures the past. Betas, Sharpe ratios, and election sensitivity describe how these stocks behaved — not how they will behave. History itself shows the limits: in 2014 the market spent months pricing an alternation that never came, and in 2022 the election barely moved prices while the damage showed up later, during the transition.",
+    "dataTitle": "Data.",
+    "dataBody": "Prices: {prices}. Macro: {macro}. Tesouro Direto: official rates from Tesouro Transparente. Series since 2013, updated on {updated}. Run <command>npm run fetch-data</command> to fetch fresh quotes.",
+    "disclaimer": "Informational and educational content only. Not investment advice, securities analysis, or an offer to buy or sell."
+  },
+  "MacroHeader": {
+    "title": "Termômetro Eleitoral",
+    "description": "How much of the price of Brazil's largest B3 companies is political risk — and how much is everything else. Metrics computed from real price history since 2013, with a study of the 2014, 2018, and 2022 elections.",
+    "dataAsOf": "Data as of {date}",
+    "firstRound": "2026 first round",
+    "days": "days",
+    "runoff": "{firstRound} · runoff on {runoff}",
+    "ipcaPlus": "IPCA + {rate}",
+    "stats": {
+      "selic": {
+        "label": "Selic target",
+        "hint": "Set by Copom"
+      },
+      "cdi": {
+        "label": "Annualized CDI",
+        "hint": "What fixed income pays today"
+      },
+      "ipca12m": {
+        "label": "12-month IPCA",
+        "hint": "Cumulative inflation"
+      },
+      "realRate": {
+        "label": "Real rate (CDI)",
+        "hint": "CDI net of IPCA"
+      },
+      "ipca2035": {
+        "label": "IPCA+ 2035",
+        "hint": "Real yield locked in today"
+      },
+      "ibovespa": {
+        "label": "Ibovespa",
+        "hint": "{return} over 12 months"
+      },
+      "usd": {
+        "label": "Dollar",
+        "hint": "Spot USD/BRL"
+      },
+      "brent": {
+        "label": "Brent",
+        "hint": "Benchmark crude"
+      }
+    }
+  },
+  "Dashboard": {
+    "tabs": {
+      "renda": "CDI vs IPCA+",
+      "ranking": "Ranking",
+      "cenarios": "Scenarios",
+      "eleicoes": "Past elections",
+      "preco": "Typical price"
+    }
+  },
+  "RankingTable": {
+    "views": {
+      "risco": {
+        "label": "Risk and return",
+        "description": "How each stock behaved over the last 3 years, always compared with the CDI — the real alternative for anyone investing in Brazil."
+      },
+      "valuation": {
+        "label": "Price and fundamentals",
+        "description": "What you pay for each stock: multiples, dividends, and the gap between today's price and the median of the last 3 years."
+      },
+      "politica": {
+        "label": "Politics and rates",
+        "description": "How far each stock diverges from the Ibovespa in election season and how it has historically reacted to Selic moves."
+      }
+    },
+    "sectors": {
+      "todas": "All",
+      "bancos": "Banks",
+      "energia": "Power",
+      "baratas": "P/B < 1"
+    },
+    "sectorHints": {
+      "bancos": "Sorted by P/B. Below 1, the market pays less than book value — the discount on Banco do Brasil and the regionals is structural, not an automatic mispricing. ",
+      "energia": "Listed utilities: generation, transmission, and distribution. Low P/B shows up in transmission (ISA, Alupar) and Cemig; Equatorial and Eneva trade at a growth multiple. ",
+      "baratas": "Only names trading below book value. Compare with the 3-year median: a low multiple after a rally can still be expensive versus its own history. "
+    },
+    "stateLinkedOnly": "State-linked companies only",
+    "company": "Company",
+    "price": "Price",
+    "footer": "Click any row to open the full company analysis. Hover a column name to see how the metric is calculated.",
+    "weak": "weak",
+    "bananaTooltip": "P/B {pb} — below book value. That is a discount, not a guarantee of upside.",
+    "stateControl": {
+      "estatal": "state-owned",
+      "ex-estatal": "ex-state",
+      "regulada": "regulated",
+      "privada": "private"
+    },
+    "columns": {
+      "cagr3y": {
+        "label": "Return p.a. (3y)",
+        "help": "Annualized total return over the last 3 years, including reinvested dividends."
+      },
+      "excessOverCdi": {
+        "label": "vs CDI",
+        "help": "How much the stock returned above (or below) the CDI over the same period, annualized. Negative means fixed income would have been better."
+      },
+      "vol": {
+        "label": "Volatility",
+        "help": "Annualized standard deviation of daily returns. Higher means the price swings more."
+      },
+      "sharpe": {
+        "label": "Sharpe",
+        "help": "Return above the CDI divided by volatility. Measures how much extra return you got per unit of risk. Negative: you took risk and still lost to fixed income."
+      },
+      "beta": {
+        "label": "Beta",
+        "help": "Sensitivity to the Ibovespa. A beta of 1.5 means the stock tends to rise or fall 1.5% when the index moves 1%."
+      },
+      "dd": {
+        "label": "Max drawdown",
+        "help": "The largest peak-to-trough drop within the last 3 years. The size of the pain the history has already delivered."
+      },
+      "vsMedian": {
+        "label": "vs 3y median",
+        "help": "Today's price versus the median of the last 3 years — the 'typical price'. The marker shows where the stock sits in its historical distribution."
+      },
+      "vsHigh": {
+        "label": "vs 52w high",
+        "help": "Distance to the high of the last 12 months."
+      },
+      "pe": {
+        "label": "P/E",
+        "help": "Price divided by trailing twelve-month earnings. How many years of current profit you pay for the company."
+      },
+      "pb": {
+        "label": "P/B",
+        "help": "Price to book. Below 1 means the market pays less than the company's accounting equity."
+      },
+      "dy": {
+        "label": "Dividends 12m",
+        "help": "Distributions paid over the last 12 months over the current price. Compare with the CDI before calling it 'income'."
+      },
+      "roe": {
+        "label": "ROE",
+        "help": "Return on equity: how much profit the company earns on shareholders' capital."
+      },
+      "electionSensitivity": {
+        "label": "Election sensitivity",
+        "help": "How far the stock diverges from the Ibovespa in election season, divided by how far it diverges the rest of the time. Above 1.00: the election really moves this stock beyond what it does to the index."
+      },
+      "selicBeta": {
+        "label": "Selic +1 pp effect",
+        "help": "Excess return versus the Ibovespa historically associated with each percentage point rise in the Selic. Negative values point to stocks that suffer when rates rise and benefit from cuts."
+      },
+      "hiking": {
+        "label": "In hiking cycle",
+        "help": "Annualized excess return versus the Ibovespa during periods when the Selic was rising."
+      },
+      "easing": {
+        "label": "In easing cycle",
+        "help": "Annualized excess return versus the Ibovespa during periods when the Selic was falling."
+      },
+      "usdBeta": {
+        "label": "USD beta",
+        "help": "Effect of a stronger dollar on the stock, after stripping out what the Ibovespa explains. Positive indicates FX protection."
+      },
+      "brentBeta": {
+        "label": "Oil beta",
+        "help": "Effect of a Brent rally on the stock, after stripping out what the Ibovespa explains."
+      }
+    }
+  },
+  "AssetDetail": {
+    "revenuePrefix": "revenue {base}",
+    "asOf": "as of {date}",
+    "median3y": "3-year median: {value}",
+    "vsMedian": "{value} vs median",
+    "medianLabel": "median",
+    "electionLabel": "election {year}",
+    "sections": {
+      "riskReturn": "Risk and return · 3 years",
+      "fundamentals": "Fundamentals",
+      "factors": "Factor exposure",
+      "sensitivity": "Political and rate sensitivity",
+      "electionHistory": "Election history · excess return vs Ibovespa"
+    },
+    "metrics": {
+      "cagr": "Return p.a.",
+      "vsCdi": "vs CDI",
+      "vsCdiHint": "annualized",
+      "volatility": "Volatility",
+      "sharpe": "Sharpe",
+      "sortino": "Sortino",
+      "beta": "Beta",
+      "correlation": "Correlation",
+      "vsIbov": "vs Ibovespa",
+      "maxDrawdown": "Max drawdown",
+      "troughOn": "trough on {date}",
+      "marketCap": "Market cap",
+      "pe": "P/E",
+      "peHint": "trailing 12m",
+      "forwardPe": "Forward P/E",
+      "pb": "P/B",
+      "roe": "ROE",
+      "profitMargin": "Net margin",
+      "dividends12m": "Dividends 12m",
+      "dividendsHint": "distributions paid / price",
+      "debtToEquity": "Debt/equity",
+      "ibov": "Ibovespa",
+      "usd": "USD",
+      "brent": "Brent",
+      "ust10y": "10y Treasury",
+      "electionRatio": "Election ratio",
+      "electionRatioHint": "election divergence / normal",
+      "selicPlus1": "Selic +1 pp",
+      "weakSignal": "statistically weak signal",
+      "tStat": "t = {value}",
+      "hikingCycle": "Hiking cycle",
+      "easingCycle": "Easing cycle",
+      "excessAnnualized": "annualized excess"
+    },
+    "factorsNote": "USD, Brent, and Treasury enter after stripping out the Ibovespa effect, so they measure what remains beyond the index move. The model explains {rSquared} of the stock's daily variation across {observations} sessions.",
+    "noElectionHistory": "No trading history covering prior elections.",
+    "stateControl": {
+      "estatal": "state-owned",
+      "ex-estatal": "ex-state",
+      "regulada": "regulated",
+      "privada": "private"
+    },
+    "revenueBase": {
+      "doméstica": "domestic",
+      "exportadora": "export",
+      "mista": "mixed"
+    }
+  },
+  "PriceDistribution": {
+    "title": "Where today's price sits within the last 3 years",
+    "intro": "The arithmetic mean lies when the series has spikes and collapses: a short rally is enough to pull the whole number. That is why the reference here is the median and the quartiles. The bar shows the range from the period low to the high, the darker band holds the middle half of sessions, and the marker is the current price.",
+    "sorts": {
+      "percentile": "Cheapest first",
+      "vsHigh": "Distance from high",
+      "ticker": "Alphabetical"
+    },
+    "headers": {
+      "company": "Company",
+      "range": "Low · quartiles · high (3 years)",
+      "vsMedian": "Price vs median"
+    },
+    "medianTooltip": "Median: {value}",
+    "todayTooltip": "Today: {value}",
+    "percentileTooltip": "Percentile {value} of the last 3 years",
+    "high52w": "52w high {value}",
+    "footer": "Being below the median does not mean cheap, and being above does not mean expensive. A company whose earnings doubled deserves to trade above its own history; another in decline can fall forever. The percentile says where the price is, not whether the price makes sense."
+  },
+  "ElectionStudy": {
+    "title": "What each stock did in excess of the Ibovespa",
+    "intro": "Every figure nets out the index move. What shows up in the table is company-specific — the political premium or discount the market assigned to it, not the tide that lifted or sank every boat.",
+    "winnerBadge": "Winner",
+    "pricedInLabel": "What was in the price:",
+    "noteLabel": "What happened:",
+    "companyColumn": "Company",
+    "ibovespaTooltip": "Ibovespa: {return}",
+    "noSeries": "no series",
+    "footnote": "The most useful reading is not the next-day column, but comparing the prior 90 sessions with the year after. When a stock rallies hard beforehand and gives it back later, the market bought the expectation and sold the fact."
+  },
+  "Elections": {
+    "2014": {
+      "winner": "Dilma Rousseff (re-elected)",
+      "pricedIn": "Alternation rally: the market rose hard from March to September as polls suggested a change of government.",
+      "note": "The limiting case of an election priced in too early. The reversal came on election night, and state-controlled names gave back the premium they had built up."
+    },
+    "2018": {
+      "winner": "Jair Bolsonaro",
+      "pricedIn": "A liberal agenda with Paulo Guedes at Finance, privatization promises, and pension reform.",
+      "note": "The result confirmed the scenario the market had been buying since September, so the rally came before — and continued after."
+    },
+    "2022": {
+      "winner": "Luiz Inácio Lula da Silva",
+      "pricedIn": "A Lula win widely expected in the polls, with doubt about the new term's fiscal anchor.",
+      "note": "The election itself barely moved prices. The damage came later, with the Transition PEC — showing that what matters is what the government does, not who wins."
+    },
+    "windows": {
+      "pre90": {
+        "label": "90 sessions before",
+        "description": "The election race itself. This is where the market recalculates probabilities and moves prices."
+      },
+      "d1": {
+        "label": "1st session after 1st round",
+        "description": "The immediate reaction to the result. Measures how surprised the market was."
+      },
+      "d5": {
+        "label": "5 sessions after 1st round",
+        "description": "The first week, after the initial shock noise fades."
+      },
+      "runoffD1": {
+        "label": "1st session after runoff",
+        "description": "The reaction to the definitive winner."
+      },
+      "post60": {
+        "label": "60 sessions after runoff",
+        "description": "The government transition: economic team, early fiscal signals."
+      },
+      "post250": {
+        "label": "1 year after runoff",
+        "description": "The real test. Election euphoria either becomes a structural rally — or evaporates."
+      }
+    }
+  },
+  "ScenarioSimulator": {
+    "chooseTitle": "Pick a scenario",
+    "chooseIntro": "Each scenario is a set of shocks over a 6-month horizon. Adjust the controls to build your own.",
+    "shocksTitle": "Shocks",
+    "adjusted": "(adjusted)",
+    "restore": "Restore",
+    "resultsTitle": "Estimated 6-month return",
+    "resultsIntro": "Projection built from each stock's historical betas. A sensitivity reading, not a forecast: it shows how these companies tended to react to similar shocks.",
+    "cdiPeriod": "CDI over the period",
+    "vsCdi": "{return} vs CDI",
+    "channelLegend": "Contribution by channel:",
+    "oppositeChannel": "channel in the opposite direction",
+    "channels": {
+      "ibov": "Market",
+      "selic": "Rates",
+      "usdbrl": "FX",
+      "brent": "Oil",
+      "ust10y": "External rates"
+    },
+    "shocks": {
+      "ibov": {
+        "label": "Ibovespa",
+        "help": "The move of the market as a whole."
+      },
+      "selic": {
+        "label": "Selic",
+        "help": "Change in the policy rate, in percentage points."
+      },
+      "usdbrl": {
+        "label": "Dollar",
+        "help": "An increase means a weaker real."
+      },
+      "brent": {
+        "label": "Brent crude",
+        "help": "Commodity price on the international market."
+      },
+      "ust10y": {
+        "label": "10-year Treasury",
+        "help": "US long rates: a rise tends to drain capital from emerging markets."
+      }
+    }
+  },
+  "Scenarios": {
+    "neutral": {
+      "name": "Nothing changes",
+      "summary": "The election confirms what was already in the price. Rates, FX, and oil stay put. Serves as a baseline to compare everything else against."
+    },
+    "promarket": {
+      "name": "Pro-market turn",
+      "summary": "Outcome read as favorable to fiscal discipline and privatizations. The real strengthens, the yield curve rallies, and Copom can cut the Selic."
+    },
+    "fiscalanchor": {
+      "name": "Continuity with a fiscal anchor",
+      "summary": "The elected government presents a fiscal plan the market finds credible. The rally is smaller than in a full turn, but the rates channel works the same way."
+    },
+    "fiscaldrift": {
+      "name": "No fiscal anchor",
+      "summary": "Public spending accelerates, debt worsens, and the market demands a premium. The real weakens and the central bank starts hiking again."
+    },
+    "oilshock": {
+      "name": "Oil shock",
+      "summary": "Brent spikes on geopolitical tension. Good for producers, bad for inflation — and reopens the debate over Petrobras pricing policy."
+    },
+    "riskoff": {
+      "name": "Global risk-off",
+      "summary": "The problem comes from abroad: US long rates rise, the dollar strengthens, and foreign capital leaves emerging markets. The election becomes a sideshow."
+    }
+  },
+  "FixedIncome": {
+    "directAnswer": {
+      "badge": "Straight answer",
+      "title": "Not automatically. Locking in IPCA+ today hedges inflation — not a Selic cut.",
+      "body1": "Tesouro IPCA+ 2029 pays IPCA + {ipcaRate} real. With trailing 12-month IPCA at {ipca12m}, that is about {nominal} a year — less than CDI at {cdi}. Prefixed 2029 at {prefixRate} only loses to IPCA+ if average inflation through 2029 stays above {breakeven}. Below that, locking the prefixed bond today wins.",
+      "body2": "IPCA+ stops being “40% of nothing” when Selic falls: the {midRate} real yield stays locked. CDI does not. But if Selic falls <emphasis>because</emphasis> inflation was brought under control, the prefixed bond — not IPCA+ — is the contract that gains most from buying now."
+    },
+    "verdicts": {
+      "selic": {
+        "title": "Tesouro Selic / CDB",
+        "rateHint": "floats with Copom",
+        "body": "Pays while Selic is high. The day rates fall, the yield falls with them. It is the only one that does not take a mark-to-market hit if you need the cash tomorrow."
+      },
+      "prefixado": {
+        "title": "Tesouro Prefixed",
+        "rateHint": "mat. {year} locked",
+        "body": "Wins if inflation cooperates and Selic falls. It is the bet on a fiscal anchor: Brazil conquers inflation and you kept 14% in the contract."
+      },
+      "ipca": {
+        "title": "Tesouro IPCA+",
+        "rateHint": "mat. {year} locked",
+        "body": "Wins if inflation surprises to the upside. Today’s real yield is high by historical standards — locking in now makes sense for anyone who can hold to maturity."
+      }
+    },
+    "scenarios": {
+      "title": "What if Selic and IPCA turn out differently?",
+      "intro": "The four scenarios below reprice bonds you would buy today, held to maturity, with regressive income tax. Nothing here is mark-to-market: it assumes you do not sell along the way.",
+      "hypothesis": "Forward path assumption",
+      "horizon": "Horizon",
+      "selicAvg": "Average Selic",
+      "ipcaAvg": "Average IPCA",
+      "breakevenNote": "Breakeven inflation for prefixed 2029 vs IPCA+ 2029: {breakeven}. Above that, IPCA+ beats the prefixed bond.",
+      "bestNet": "Best after-tax net in this scenario",
+      "winnerLine": "{net} net per year · {real} real after inflation",
+      "productMeta": "gross {gross} · tax {tax} · matures in {years} years",
+      "realShort": "real {rate}",
+      "cdbNote": "The violet line is a CDB at 140% of CDI — the product from the original conversation. It shows up at mid-sized banks, with a locked term and FGC coverage. It is excluded from the winner pick because it is not comparable to Tesouro on liquidity or availability."
+    },
+    "presets": {
+      "hoje": {
+        "name": "Rates as they are",
+        "summary": "Selic stays at 14% and IPCA near the trailing 4.2%. This is the scenario where CDI keeps paying more than IPCA+ in nominal terms."
+      },
+      "corte": {
+        "name": "Post-election cut",
+        "summary": "Credible fiscal plan, inflation anchored, Copom cuts Selic to 10%. CDI’s real yield falls; the IPCA+ real yield you already locked stays put."
+      },
+      "desancora": {
+        "name": "No fiscal anchor",
+        "summary": "Spending rises, inflation returns to 7% and Selic goes to 18%. Nominal CDI soars, but purchasing power is eaten. Anyone who locked IPCA+ at 7.5% real keeps what the prefixed bond loses."
+      },
+      "meta": {
+        "name": "Inflation on target",
+        "summary": "IPCA at 3% — the central bank target — and Selic at 9%. CDI’s real yield shrinks; IPCA+ bought today at 7.5% real becomes an expensive contract to have walked away from."
+      }
+    },
+    "horizons": {
+      "3": "3 years",
+      "5": "5 years",
+      "9": "9 years"
+    },
+    "history": {
+      "title": "What IPCA+ 2035 actually returned",
+      "intro": "Buying IPCA+ is not the same as holding to maturity. The table below uses the market price of Tesouro IPCA+ 2035: the return of someone who sold midway. Over the last 3 years the real yield went from {fromRate} to {toRate}, and mark-to-market ate the coupon.",
+      "period": "{count, plural, one {# year} other {# years}}",
+      "columns": {
+        "period": "Period",
+        "cdi": "CDI",
+        "ipca": "IPCA",
+        "ipcaSold": "IPCA+ 2035 sold",
+        "ibovespa": "Ibovespa",
+        "lockedReal": "Real yield at purchase"
+      },
+      "footer": "Over 3 years CDI returned {cdi} a year. Anyone who bought IPCA+ 2035 and sold now got {sold} — losing to liquid fixed income and to equities. Anyone who holds to 2035 still receives the real yield locked at purchase. The difference between those two sentences is the holding period."
+    },
+    "chart": {
+      "title": "Tesouro IPCA+ 2035 real yield · {rate} today",
+      "intro": "Each point on this chart is the real rate Tesouro was willing to lock that day. Buying IPCA+ in 2019 at 3.4% locked in cheap. Buying now near 7.5% is expensive for Tesouro and cheap for you — as long as you can avoid selling if the real yield goes to 8.5%.",
+      "tooltip": "IPCA + {rate}%"
+    },
+    "menu": {
+      "title": "Current Tesouro Direto menu",
+      "intro": "Morning buy rates as of {date}. Implied nominal for IPCA+ uses trailing 12-month IPCA only as illustration — future inflation is what decides. Selic looks almost identical to CDI because the premium on those bonds is near zero.",
+      "columns": {
+        "title": "Bond",
+        "lockedRate": "Locked rate",
+        "impliedNominal": "Implied nominal",
+        "netAfterTax": "Net after tax",
+        "realNet": "Real net",
+        "vsCdi": "vs net CDI"
+      },
+      "meta": "{years} years · tax {tax}",
+      "ipcaPlus": "IPCA + {rate}",
+      "selicPlus": "Selic + {rate}"
+    }
+  },
+  "FixedIncomeLib": {
+    "families": {
+      "selic": "Floating on Selic",
+      "ipca": "Floating on IPCA",
+      "prefixado": "Prefixed"
+    },
+    "products": {
+      "selicCdi": "Tesouro Selic / CDB 100% CDI",
+      "cdb140": "CDB 140% of CDI"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { AssetAnalysis } from "@/lib/analytics";
 import { money, percent, signedPercent } from "@/lib/format";
@@ -14,11 +15,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 type SortId = "percentile" | "ticker" | "vsHigh";
 
-const SORTS: { id: SortId; label: string }[] = [
-  { id: "percentile", label: "Mais barata primeiro" },
-  { id: "vsHigh", label: "Distância da máxima" },
-  { id: "ticker", label: "Alfabética" },
-];
+const SORT_IDS: SortId[] = ["percentile", "vsHigh", "ticker"];
 
 /** Posição de um preço dentro da faixa mínimo–máximo, em porcentagem. */
 function position(value: number, min: number, max: number): number {
@@ -33,6 +30,8 @@ export function PriceDistribution({
   assets: AssetAnalysis[];
   onSelect: (ticker: string) => void;
 }) {
+  const t = useTranslations("PriceDistribution");
+  const locale = useLocale();
   const [sort, setSort] = useState<SortId>("percentile");
 
   const rows = useMemo(() => {
@@ -46,16 +45,8 @@ export function PriceDistribution({
     <div className="space-y-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl space-y-2">
-          <h3 className="text-sm font-medium">
-            Onde está o preço de hoje dentro dos últimos 3 anos
-          </h3>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            A média aritmética mente quando a série tem picos e colapsos: basta um
-            rali curto para puxar o número inteiro. Por isso a referência aqui é a
-            mediana e os quartis. A barra mostra a faixa entre a mínima e a máxima do
-            período, a região escura concentra a metade central dos pregões, e o
-            marcador é o preço de agora.
-          </p>
+          <h3 className="text-sm font-medium">{t("title")}</h3>
+          <p className="text-xs leading-relaxed text-muted-foreground">{t("intro")}</p>
         </div>
 
         <ToggleGroup
@@ -64,9 +55,9 @@ export function PriceDistribution({
           onValueChange={(v) => v && setSort(v as SortId)}
           variant="outline"
         >
-          {SORTS.map((s) => (
-            <ToggleGroupItem key={s.id} value={s.id} className="px-3 text-xs">
-              {s.label}
+          {SORT_IDS.map((id) => (
+            <ToggleGroupItem key={id} value={id} className="px-3 text-xs">
+              {t(`sorts.${id}`)}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
@@ -74,9 +65,9 @@ export function PriceDistribution({
 
       <div className="divide-y divide-border/40 overflow-hidden rounded-xl border border-border/60 bg-card/40">
         <div className="hidden grid-cols-[110px_1fr_190px] gap-4 px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground sm:grid">
-          <div>Empresa</div>
-          <div>Mínima · quartis · máxima (3 anos)</div>
-          <div className="text-right">Preço vs mediana</div>
+          <div>{t("headers.company")}</div>
+          <div>{t("headers.range")}</div>
+          <div className="text-right">{t("headers.vsMedian")}</div>
         </div>
 
         {rows.map((asset) => {
@@ -112,7 +103,9 @@ export function PriceDistribution({
                       style={{ left: `${medianPos}%` }}
                     />
                   </TooltipTrigger>
-                  <TooltipContent>Mediana: {money(price.median3y)}</TooltipContent>
+                  <TooltipContent>
+                    {t("medianTooltip", { value: money(price.median3y, locale) })}
+                  </TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -126,25 +119,29 @@ export function PriceDistribution({
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className="tabular space-y-0.5 text-xs">
-                      <div>Hoje: {money(price.current)}</div>
+                      <div>{t("todayTooltip", { value: money(price.current, locale) })}</div>
                       <div className="text-muted-foreground">
-                        Percentil {percent(price.percentile, 0)} dos últimos 3 anos
+                        {t("percentileTooltip", {
+                          value: percent(price.percentile, 0),
+                        })}
                       </div>
                     </div>
                   </TooltipContent>
                 </Tooltip>
 
                 <div className="tabular absolute inset-x-0 bottom-0 flex justify-between text-[10px] text-muted-foreground">
-                  <span>{money(price.min3y)}</span>
-                  <span>{money(price.max3y)}</span>
+                  <span>{money(price.min3y, locale)}</span>
+                  <span>{money(price.max3y, locale)}</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between gap-3 sm:justify-end">
                 <div className="text-right">
-                  <div className="tabular text-sm font-semibold">{money(price.current)}</div>
+                  <div className="tabular text-sm font-semibold">
+                    {money(price.current, locale)}
+                  </div>
                   <div className="text-[11px] text-muted-foreground">
-                    máx 52s {money(price.high52w)}
+                    {t("high52w", { value: money(price.high52w, locale) })}
                   </div>
                 </div>
                 <div
@@ -163,12 +160,7 @@ export function PriceDistribution({
         })}
       </div>
 
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        Estar abaixo da mediana não significa estar barato, e estar acima não
-        significa estar caro. Uma empresa cujo lucro dobrou merece negociar acima do
-        próprio histórico; outra em deterioração pode cair para sempre. O percentil
-        diz onde o preço está, não se o preço faz sentido.
-      </p>
+      <p className="text-xs leading-relaxed text-muted-foreground">{t("footer")}</p>
     </div>
   );
 }

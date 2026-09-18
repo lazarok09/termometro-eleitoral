@@ -1,0 +1,54 @@
+{
+  "MacroHeader": {
+    "title": "Termômetro Eleitoral",
+    "description": "Quanto do preço das maiores empresas da B3 é risco político e quanto é tudo o mais. Métricas calculadas sobre o histórico real de preços desde 2013, com estudo das eleições de 2014, 2018 e 2022.",
+    "dataAsOf": "Dados até {date}",
+    "firstRound": "1º turno de 2026",
+    "days": "dias",
+    "runoff": "{firstRound} · 2º turno em {runoff}",
+    "ipcaPlus": "IPCA + {rate}",
+    "stats": {
+      "selic": {
+        "label": "Selic meta",
+        "hint": "Definida pelo Copom"
+      },
+      "cdi": {
+        "label": "CDI anualizado",
+        "hint": "O que a renda fixa paga hoje"
+      },
+      "ipca12m": {
+        "label": "IPCA 12 meses",
+        "hint": "Inflação acumulada"
+      },
+      "realRate": {
+        "label": "Juro real (CDI)",
+        "hint": "CDI descontado o IPCA"
+      },
+      "ipca2035": {
+        "label": "IPCA+ 2035",
+        "hint": "Taxa real travada hoje"
+      },
+      "ibovespa": {
+        "label": "Ibovespa",
+        "hint": "{return} em 12 meses"
+      },
+      "usd": {
+        "label": "Dólar",
+        "hint": "USD/BRL à vista"
+      },
+      "brent": {
+        "label": "Brent",
+        "hint": "Petróleo de referência"
+      }
+    }
+  },
+  "Dashboard": {
+    "tabs": {
+      "renda": "CDI vs IPCA+",
+      "ranking": "Ranking",
+      "cenarios": "Cenários",
+      "eleicoes": "Eleições passadas",
+      "preco": "Preço típico"
+    }
+  }
+}

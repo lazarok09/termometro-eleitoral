@@ -1,9 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import type { AssetAnalysis } from "@/lib/analytics";
-import { ELECTIONS, EVENT_WINDOWS } from "@/lib/elections";
+import {
+  ELECTIONS,
+  EVENT_WINDOWS,
+  windowDescriptionKey,
+  windowLabelKey,
+} from "@/lib/elections";
 import { signedPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +40,8 @@ export function ElectionStudy({
   assets: AssetAnalysis[];
   onSelect: (ticker: string) => void;
 }) {
+  const t = useTranslations("ElectionStudy");
+  const tElections = useTranslations("Elections");
   const [year, setYear] = useState(String(ELECTIONS[ELECTIONS.length - 1].year));
   const election = ELECTIONS.find((e) => String(e.year) === year)!;
 
@@ -52,15 +60,8 @@ export function ElectionStudy({
     <div className="space-y-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl space-y-2">
-          <h3 className="text-sm font-medium">
-            O que cada ação fez em excesso ao Ibovespa
-          </h3>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Todos os números descontam o movimento do índice. Assim, o que aparece na
-            tabela é o que foi específico da empresa — o prêmio ou o desconto político
-            que o mercado atribuiu a ela, e não a maré que levantou ou afundou todos os
-            barcos.
-          </p>
+          <h3 className="text-sm font-medium">{t("title")}</h3>
+          <p className="text-xs leading-relaxed text-muted-foreground">{t("intro")}</p>
         </div>
 
         <ToggleGroup
@@ -81,18 +82,20 @@ export function ElectionStudy({
         <div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-primary/30 text-primary">
-              Vencedor
+              {t("winnerBadge")}
             </Badge>
-            <span className="text-sm font-medium">{election.winner}</span>
+            <span className="text-sm font-medium">
+              {tElections(`${election.year}.winner`)}
+            </span>
           </div>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            <span className="font-medium text-foreground/80">O que estava nos preços: </span>
-            {election.pricedIn}
+            <span className="font-medium text-foreground/80">{t("pricedInLabel")} </span>
+            {tElections(`${election.year}.pricedIn`)}
           </p>
         </div>
         <p className="text-xs leading-relaxed text-muted-foreground sm:border-l sm:border-border/60 sm:pl-4">
-          <span className="font-medium text-foreground/80">O que aconteceu: </span>
-          {election.note}
+          <span className="font-medium text-foreground/80">{t("noteLabel")} </span>
+          {tElections(`${election.year}.note`)}
         </p>
       </div>
 
@@ -101,18 +104,18 @@ export function ElectionStudy({
           <thead>
             <tr className="border-b border-border/60">
               <th className="sticky left-0 z-10 bg-card/95 px-3 py-2.5 text-left text-xs font-medium text-muted-foreground backdrop-blur">
-                Empresa
+                {t("companyColumn")}
               </th>
               {EVENT_WINDOWS.map((w) => (
                 <th key={w.id} className="px-2 py-2.5 text-right">
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className="cursor-help text-xs font-medium text-muted-foreground">
-                        {w.label}
+                        {tElections(windowLabelKey(w.id))}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs text-pretty">
-                      {w.description}
+                      {tElections(windowDescriptionKey(w.id))}
                     </TooltipContent>
                   </Tooltip>
                 </th>
@@ -150,15 +153,21 @@ export function ElectionStudy({
                           </TooltipTrigger>
                           <TooltipContent>
                             <div className="tabular space-y-0.5 text-xs">
-                              <div>{asset.ticker}: {signedPercent(cell.assetReturn)}</div>
+                              <div>
+                                {asset.ticker}: {signedPercent(cell.assetReturn)}
+                              </div>
                               <div className="text-muted-foreground">
-                                Ibovespa: {signedPercent(cell.ibovReturn)}
+                                {t("ibovespaTooltip", {
+                                  return: signedPercent(cell.ibovReturn),
+                                })}
                               </div>
                             </div>
                           </TooltipContent>
                         </Tooltip>
                       ) : (
-                        <span className="text-xs text-muted-foreground/40">sem série</span>
+                        <span className="text-xs text-muted-foreground/40">
+                          {t("noSeries")}
+                        </span>
                       )}
                     </td>
                   );
@@ -169,11 +178,7 @@ export function ElectionStudy({
         </table>
       </div>
 
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        A leitura mais útil não é a coluna do dia seguinte, e sim a comparação entre
-        os 90 pregões anteriores e o ano posterior. Quando uma ação sobe muito antes e
-        devolve depois, o mercado comprou a expectativa e vendeu o fato.
-      </p>
+      <p className="text-xs leading-relaxed text-muted-foreground">{t("footnote")}</p>
     </div>
   );
 }

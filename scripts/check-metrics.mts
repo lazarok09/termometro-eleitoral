@@ -33,7 +33,7 @@ const petr = rows.find(r=>r.ticker==="PETR4")!;
 console.log("\n=== PETR4 fatores ===", JSON.stringify(petr.factors));
 console.log("=== PETR4 eleições ===");
 for (const e of petr.elections) {
-  console.log(" ", e.year, e.winner);
-  for (const w of e.windows) console.log("   ", w.label.padEnd(26), (w.assetReturn*100).toFixed(1).padStart(7)+"%", "ibov", (w.ibovReturn*100).toFixed(1).padStart(7)+"%", "excesso", (w.excess*100).toFixed(1).padStart(7)+"%");
+  console.log(" ", e.year);
+  for (const w of e.windows) console.log("   ", w.windowId.padEnd(26), (w.assetReturn*100).toFixed(1).padStart(7)+"%", "ibov", (w.ibovReturn*100).toFixed(1).padStart(7)+"%", "excesso", (w.excess*100).toFixed(1).padStart(7)+"%");
 }
 console.log("\n=== PETR4 juros ===", JSON.stringify(petr.rateSensitivity));

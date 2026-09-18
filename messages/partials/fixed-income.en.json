@@ -1,0 +1,109 @@
+{
+  "FixedIncome": {
+    "directAnswer": {
+      "badge": "Straight answer",
+      "title": "Not automatically. Locking in IPCA+ today hedges inflation — not a Selic cut.",
+      "body1": "Tesouro IPCA+ 2029 pays IPCA + {ipcaRate} real. With trailing 12-month IPCA at {ipca12m}, that is about {nominal} a year — less than CDI at {cdi}. Prefixed 2029 at {prefixRate} only loses to IPCA+ if average inflation through 2029 stays above {breakeven}. Below that, locking the prefixed bond today wins.",
+      "body2": "IPCA+ stops being “40% of nothing” when Selic falls: the {midRate} real yield stays locked. CDI does not. But if Selic falls <emphasis>because</emphasis> inflation was brought under control, the prefixed bond — not IPCA+ — is the contract that gains most from buying now."
+    },
+    "verdicts": {
+      "selic": {
+        "title": "Tesouro Selic / CDB",
+        "rateHint": "floats with Copom",
+        "body": "Pays while Selic is high. The day rates fall, the yield falls with them. It is the only one that does not take a mark-to-market hit if you need the cash tomorrow."
+      },
+      "prefixado": {
+        "title": "Tesouro Prefixed",
+        "rateHint": "mat. {year} locked",
+        "body": "Wins if inflation cooperates and Selic falls. It is the bet on a fiscal anchor: Brazil conquers inflation and you kept 14% in the contract."
+      },
+      "ipca": {
+        "title": "Tesouro IPCA+",
+        "rateHint": "mat. {year} locked",
+        "body": "Wins if inflation surprises to the upside. Today’s real yield is high by historical standards — locking in now makes sense for anyone who can hold to maturity."
+      }
+    },
+    "scenarios": {
+      "title": "What if Selic and IPCA turn out differently?",
+      "intro": "The four scenarios below reprice bonds you would buy today, held to maturity, with regressive income tax. Nothing here is mark-to-market: it assumes you do not sell along the way.",
+      "hypothesis": "Forward path assumption",
+      "horizon": "Horizon",
+      "selicAvg": "Average Selic",
+      "ipcaAvg": "Average IPCA",
+      "breakevenNote": "Breakeven inflation for prefixed 2029 vs IPCA+ 2029: {breakeven}. Above that, IPCA+ beats the prefixed bond.",
+      "bestNet": "Best after-tax net in this scenario",
+      "winnerLine": "{net} net per year · {real} real after inflation",
+      "productMeta": "gross {gross} · tax {tax} · matures in {years} years",
+      "realShort": "real {rate}",
+      "cdbNote": "The violet line is a CDB at 140% of CDI — the product from the original conversation. It shows up at mid-sized banks, with a locked term and FGC coverage. It is excluded from the winner pick because it is not comparable to Tesouro on liquidity or availability."
+    },
+    "presets": {
+      "hoje": {
+        "name": "Rates as they are",
+        "summary": "Selic stays at 14% and IPCA near the trailing 4.2%. This is the scenario where CDI keeps paying more than IPCA+ in nominal terms."
+      },
+      "corte": {
+        "name": "Post-election cut",
+        "summary": "Credible fiscal plan, inflation anchored, Copom cuts Selic to 10%. CDI’s real yield falls; the IPCA+ real yield you already locked stays put."
+      },
+      "desancora": {
+        "name": "No fiscal anchor",
+        "summary": "Spending rises, inflation returns to 7% and Selic goes to 18%. Nominal CDI soars, but purchasing power is eaten. Anyone who locked IPCA+ at 7.5% real keeps what the prefixed bond loses."
+      },
+      "meta": {
+        "name": "Inflation on target",
+        "summary": "IPCA at 3% — the central bank target — and Selic at 9%. CDI’s real yield shrinks; IPCA+ bought today at 7.5% real becomes an expensive contract to have walked away from."
+      }
+    },
+    "horizons": {
+      "3": "3 years",
+      "5": "5 years",
+      "9": "9 years"
+    },
+    "history": {
+      "title": "What IPCA+ 2035 actually returned",
+      "intro": "Buying IPCA+ is not the same as holding to maturity. The table below uses the market price of Tesouro IPCA+ 2035: the return of someone who sold midway. Over the last 3 years the real yield went from {fromRate} to {toRate}, and mark-to-market ate the coupon.",
+      "period": "{count, plural, one {# year} other {# years}}",
+      "columns": {
+        "period": "Period",
+        "cdi": "CDI",
+        "ipca": "IPCA",
+        "ipcaSold": "IPCA+ 2035 sold",
+        "ibovespa": "Ibovespa",
+        "lockedReal": "Real yield at purchase"
+      },
+      "footer": "Over 3 years CDI returned {cdi} a year. Anyone who bought IPCA+ 2035 and sold now got {sold} — losing to liquid fixed income and to equities. Anyone who holds to 2035 still receives the real yield locked at purchase. The difference between those two sentences is the holding period."
+    },
+    "chart": {
+      "title": "Tesouro IPCA+ 2035 real yield · {rate} today",
+      "intro": "Each point on this chart is the real rate Tesouro was willing to lock that day. Buying IPCA+ in 2019 at 3.4% locked in cheap. Buying now near 7.5% is expensive for Tesouro and cheap for you — as long as you can avoid selling if the real yield goes to 8.5%.",
+      "tooltip": "IPCA + {rate}%"
+    },
+    "menu": {
+      "title": "Current Tesouro Direto menu",
+      "intro": "Morning buy rates as of {date}. Implied nominal for IPCA+ uses trailing 12-month IPCA only as illustration — future inflation is what decides. Selic looks almost identical to CDI because the premium on those bonds is near zero.",
+      "columns": {
+        "title": "Bond",
+        "lockedRate": "Locked rate",
+        "impliedNominal": "Implied nominal",
+        "netAfterTax": "Net after tax",
+        "realNet": "Real net",
+        "vsCdi": "vs net CDI"
+      },
+      "meta": "{years} years · tax {tax}",
+      "ipcaPlus": "IPCA + {rate}",
+      "selicPlus": "Selic + {rate}"
+    }
+  },
+  "FixedIncomeLib": {
+    "families": {
+      "selic": "Floating on Selic",
+      "ipca": "Floating on IPCA",
+      "prefixado": "Prefixed"
+    },
+    "products": {
+      "selicCdi": "Tesouro Selic / CDB 100% CDI",
+      "cdb140": "CDB 140% of CDI"
+    }
+  }
+}
